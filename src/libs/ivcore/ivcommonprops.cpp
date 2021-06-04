@@ -36,6 +36,8 @@ const QHash<QString, Props::Token> Props::TokensByName = {
     { "Comment", Token::Comment },
     { "Source", Token::Source },
     { "Target", Token::Target },
+    { "MyFunction", Token::MyFunction },
+
 
     // attrs:
     { "name", Token::name },

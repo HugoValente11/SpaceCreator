@@ -117,7 +117,10 @@ bool StringTemplate::parseFile(
     m_fileLoader->setTemplateDirs({ fileInfo.absolutePath() });
 
     //    m_engine->setPluginPaths({ GRANTLEE_LIB_DIR, QApplication::applicationDirPath() });
+//    m_engine->addPluginPath(QApplication::applicationDirPath());
     m_engine->addPluginPath(QApplication::applicationDirPath());
+    QString myQApplicationPath = QApplication::applicationDirPath();
+    qWarning() << Q_FUNC_INFO << "Application path looking for grantlee" << QApplication::applicationDirPath();
 
     Grantlee::Context context;
     for (auto it = grouppedObjects.cbegin(); it != grouppedObjects.cend(); ++it) {
@@ -132,9 +135,12 @@ bool StringTemplate::parseFile(
             }
         }
         context.insert(name, v);
+
     }
 
     const Grantlee::Template stringTemplate = m_engine->loadByName(fileInfo.fileName());
+    qWarning() << Q_FUNC_INFO << "String template:" << stringTemplate;
+
     if (stringTemplate->error()) {
         // Tokenizing or parsing error, or couldn't find custom tags or filters.
         qWarning() << Q_FUNC_INFO << stringTemplate->errorString();
@@ -147,6 +153,10 @@ bool StringTemplate::parseFile(
     NoEscapeOutputStream outputStream(&textStream, m_doEscape);
     stringTemplate->render(&outputStream, &context);
     const QString result = output.trimmed();
+
+    qWarning() << Q_FUNC_INFO << "Output stream:" << &outputStream;
+    qWarning() << Q_FUNC_INFO << "Context :" << &context;
+
 
     const QString formatted = formatText(result);
     if (!out->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {

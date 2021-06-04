@@ -24,6 +24,7 @@ enum Id
 {
     CreateFunctionTypeEntity = 0,
     CreateCommentEntity,
+    CreateMyFunctionEntity,
     CreateFunctionEntity,
     CreateInterfaceEntity,
     CreateConnectionEntity,

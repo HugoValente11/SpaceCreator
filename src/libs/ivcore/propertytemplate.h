@@ -42,7 +42,8 @@ public:
         Provided_Interface = 0x4,
         Comment = 0x8,
         Connection = 0x10,
-        All = Function | Required_Interface | Provided_Interface | Comment | Connection
+        MyFunction = 0x20,
+        All = Function | Required_Interface | Provided_Interface | Comment | Connection | MyFunction
     };
 
     Q_ENUM(Scope)

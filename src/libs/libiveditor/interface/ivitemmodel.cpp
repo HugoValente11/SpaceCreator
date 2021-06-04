@@ -30,6 +30,7 @@
 #include "interface/ivfunctiontypegraphicsitem.h"
 #include "interface/ivinterfacegraphicsitem.h"
 #include "interface/ivinterfacegroupgraphicsitem.h"
+#include "interface/ivmyfunctiongraphicsitem.h"
 #include "interfacetabgraphicsscene.h"
 #include "ivcomment.h"
 #include "ivconnection.h"
@@ -37,6 +38,7 @@
 #include "ivfunction.h"
 #include "ivinterface.h"
 #include "ivinterfacegroup.h"
+#include "ivmyfunction.h"
 
 #include <QGraphicsView>
 #include <QGuiApplication>
@@ -357,7 +359,7 @@ void IVItemModel::removeItemForObject(shared::Id objectId)
 void IVItemModel::setupInnerGeometry(ivm::IVObject *obj) const
 {
     static const QSet<ivm::IVObject::Type> kTypes { ivm::IVObject::Type::FunctionType, ivm::IVObject::Type::Function,
-        ivm::IVObject::Type::Comment };
+        ivm::IVObject::Type::Comment, ivm::IVObject::Type::MyFunction };
 
     if (!obj || !kTypes.contains(obj->type())) {
         return;
@@ -571,6 +573,13 @@ QGraphicsItem *IVItemModel::createItemForObject(ivm::IVObject *obj)
                 &IVItemModel::scheduleInterfaceTextUpdate);
         nestedGeomtryConnect(parentItem, function);
         iObj = function;
+    } break;
+    case ivm::IVObject::Type::MyFunction: {
+        auto myFunction = new IVMyFunctionGraphicsItem(qobject_cast<ivm::IVMyFunction *>(obj), parentItem);
+        connect(myFunction, &shared::ui::InteractiveObjectBase::boundingBoxChanged, this,
+                &IVItemModel::scheduleInterfaceTextUpdate);
+        nestedGeomtryConnect(parentItem, myFunction);
+        iObj = myFunction;
     } break;
     case ivm::IVObject::Type::FunctionType: {
         auto functionType = new IVFunctionTypeGraphicsItem(qobject_cast<ivm::IVFunctionType *>(obj), parentItem);

@@ -23,4 +23,7 @@ comm                :   |_ Instance of comment
 {% for comm in Comments %}
     {% include "comment.tmplt" %}
 {% endfor %}
+{% for myfunc in MyFunctions %}
+    {% include "myfunction.tmplt" %}
+{% endfor %}
 </InterfaceView>

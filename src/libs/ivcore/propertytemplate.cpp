@@ -395,6 +395,9 @@ static inline PropertyTemplate::Scope typeToScope(const IVObject::Type &type)
     case ivm::IVObject::Type::Function:
         scope = PropertyTemplate::Scope::Function;
         break;
+    case ivm::IVObject::Type::MyFunction:
+        scope = PropertyTemplate::Scope::MyFunction;
+        break;
     case ivm::IVObject::Type::RequiredInterface:
         scope = PropertyTemplate::Scope::Required_Interface;
         break;

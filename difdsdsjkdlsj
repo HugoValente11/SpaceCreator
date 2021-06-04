@@ -1,0 +1,501 @@
+[33mcommit b5b62952077fdcda2eacb9408ab0e7489a497eb9[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Hugo <hugomika68@gmail.com>
+Date:   Thu Jun 3 13:25:03 2021 +0200
+
+    Change Gitgnore
+
+[33mcommit e7ff80eafa0599f3dddd88e78f8f055943206855[m
+Merge: bbb5f1fb 4edd15af
+Author: Hugo <hugomika68@gmail.com>
+Date:   Thu Jun 3 13:22:44 2021 +0200
+
+    Merge branch 'tmp'
+
+[33mcommit 4edd15af4f1ae22698ab73a717f96647f41033ef[m[33m ([m[1;32mtmp[m[33m)[m
+Author: Hugo <hugomika68@gmail.com>
+Date:   Thu Jun 3 13:15:49 2021 +0200
+
+    Add entity, color
+
+[33mcommit bbb5f1fba23a58780b3eba5ce2404b26ffff865d[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Sun May 30 10:27:29 2021 +0000
+
+    DVE: Sharing Graphics model with Interface View
+
+[33mcommit b656574a936eefbad050b9a05f9b018b3b18b7ba[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu May 27 14:03:33 2021 +0300
+
+    IVE: Refactoring
+
+[33mcommit b5668d8eac26d213393bdd6ca2411e686ecf32bd[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri May 28 12:48:46 2021 +0200
+
+    419 Move DV editor widget to a separate class
+
+[33mcommit 9594c303d171d53a7894a3e500f42228165d6590[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri May 28 11:37:56 2021 +0200
+
+    528 Keep messages horizontal if possible
+
+[33mcommit 46b1059ec391e1dfe5b56f8c3a5dc09475dfeb2c[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri May 28 09:21:59 2021 +0000
+
+    549 Fix crash undoing delete of connection groups
+
+[33mcommit cb3e50f637ef7d7173e1b99c9daff73e0044f432[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 27 13:37:37 2021 +0200
+
+    501 Creator tool does not delete items
+
+[33mcommit dec02629d042c9c9ea86b5d9cbbb180256a98f19[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 27 10:38:42 2021 +0200
+
+    501 Fix crash undoing an IV object remove
+
+[33mcommit e0cb31e3f8c791c69bc70f2b885d424cf9297db8[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue May 25 22:08:33 2021 +0300
+
+    IVE: Interface layout
+
+[33mcommit 696e82fef4a30b5f49c23e487fe8d117c8c7d29c[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 25 17:41:48 2021 +0200
+
+    475 Handle MSC event geometry change undo/redo
+
+[33mcommit 9d56c29f1fc3e8e5ed5733c72893054634bbefa7[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue May 25 14:12:41 2021 +0000
+
+    Small fixes
+
+[33mcommit e72c759c04f25fc1b360c44ac64686321d67cac2[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue May 25 15:06:16 2021 +0300
+
+    IVE: Model resetting
+
+[33mcommit 84fa7f6b4de44329dc4bcc0f3a51f18d671074ab[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue May 25 06:35:55 2021 +0000
+
+    IVE: Instantiating fixes
+
+[33mcommit e1aad43ca3452ea96825b41b901ce54925db205a[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu May 20 18:17:39 2021 +0300
+
+    IVE: Disable entries editing in components library
+
+[33mcommit c4807ea0059fe0dcfc15665359cc592320989ef2[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu May 20 16:54:32 2021 +0300
+
+    IVE: Unit test for avaiiable FunctionType list
+
+[33mcommit ffe81545a11d4be9d9d18fd647b88a66fb6c3199[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu May 20 16:27:54 2021 +0300
+
+    IVE: Fix for available Function Type set
+
+[33mcommit 67604c931d9689e2e7486013de9eec8aedfb8f10[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu May 20 14:43:43 2021 +0300
+
+    IVE: Fix for changing Window/Document title after loading scene from
+    interfaceview.xml
+
+[33mcommit eb6ca4bb4b761a84678a38ccf53a80f6fb9d7a65[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu May 20 14:42:17 2021 +0300
+
+    IVE: Fix for chosing filename when saving newly created scene
+
+[33mcommit c1c667292950056928459bdf974ec7d903e28546[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 20 10:12:01 2021 +0200
+
+    Cleanup
+
+[33mcommit 014e6a56d1bfe01211f2782489aa24cef46f03d8[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 20 09:35:03 2021 +0200
+
+    527 Don't crash on faulty connections and warn the user
+
+[33mcommit 15b1957dbec26db91e16484389e9444f31142d49[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed May 19 17:51:49 2021 +0200
+
+    521 Fix load and save of connections of groups
+
+[33mcommit e87f17cb8282508fde5ddc5eb795b6eb2f98ccb2[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed May 19 14:21:52 2021 +0200
+
+    518 Mark the IV file as clean when being saved
+
+[33mcommit 1413b7b9880dd9a17e05595b4580baa32441ede3[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed May 19 11:45:04 2021 +0200
+
+    Fix possible crash
+
+[33mcommit 407e782001fd7bcc1a6d8296898c50145624c88b[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue May 18 17:27:26 2021 +0000
+
+    DVE: Models reusing
+
+[33mcommit 1272066b1fc9007540fd1a7eaf70447ac0402868[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 18 11:54:01 2021 +0200
+
+    517 Fix crash loading empty connection groups
+
+[33mcommit 80429bc0e7df05ad4c39a362019c730e6c2e2e3f[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 18 12:47:58 2021 +0200
+
+    428 Show color dialog in DVeditor
+
+[33mcommit 17d2b41c96612b26bcea899385178556860c0fc5[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 18 07:19:53 2021 +0000
+
+    510 Show errors from multiple asn files
+
+[33mcommit 0d1505ef6de4c6c0769a410265333041413acf55[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue May 18 06:08:33 2021 +0000
+
+    DVE: Skeletons for graphic items
+
+[33mcommit 50300439b838fb2814ed73ccf032e1102ec9bf18[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Mon May 17 17:07:41 2021 +0200
+
+    474 Support crossing messages in the msc view
+
+[33mcommit c4b4316655e67109edc3d3fbb17e9082e455fd66[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Mon May 17 17:27:58 2021 +0300
+
+    DVE: Reuse IVE utility/helpers for Graphic Scene, sharing interactive
+    object/rectangular item, geometry related undo commands.
+
+[33mcommit 00d539411ad26473ea14d70e247381f69935a6c8[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Mon May 17 11:35:40 2021 +0000
+
+    IVE: Exporting refactoring, initial implementation for exporting DeploymentView
+
+[33mcommit 18d8de9cd55c19f7a8c2aedd161ef8f664361684[m[33m ([m[1;31morigin/422-dve-add-tree-to-show-all-items-in-the-main-model[m[33m)[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri May 14 13:34:37 2021 +0200
+
+    422 Implemnt loading deployment view files in the app
+
+[33mcommit 45eb40f1c92fa17c9fb018cf3472fb1fe0019a6d[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri May 14 09:27:25 2021 +0200
+
+    508 Show DV editor UI in QtCreator
+
+[33mcommit 87bb13b2ab6129ba5587b940176ba69b8201c583[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri May 14 09:26:57 2021 +0200
+
+    508 Rename QtCIVEditor into IVQtCEditor
+
+[33mcommit d98b1117223cf421fbad627cd9e4126a919afa77[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 13 16:59:32 2021 +0200
+
+    508 Open blank DV editor widget in QtCreator
+
+[33mcommit 3ff5f16b42d16bf1fd70407bcf4a3fe9d61a06f8[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 13 14:58:43 2021 +0200
+
+    508 Rename deployment view plugin classes
+
+[33mcommit 9de1921f99d26a4f70f6ba40433d38e43abcd0d7[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 13 14:06:56 2021 +0200
+
+    474 Reduce the use of MscChart::instanceEvents()
+
+[33mcommit 88b7cb5d2b7de1933347a30585e007b554a42321[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu May 13 09:51:58 2021 +0200
+
+    474 MSC spec allows only one chart per msc document
+
+[33mcommit 84ad6a32eb30993d4ee93b57064541551136af95[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed May 12 11:31:47 2021 +0200
+
+    474 More use of msc ChartIndex
+
+[33mcommit 01b7ffb03a0a9c72cb5986be463d66773e3a6988[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed May 12 10:50:18 2021 +0200
+
+    474 Clean up unused variables
+
+[33mcommit 244accd569585ca04c912d1678ebbc912711d885[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 11 15:50:09 2021 +0200
+
+    474 Use per event instance when mocing a msc event
+
+[33mcommit b7133430e33ea52e9cc002215acf690ea30e89c7[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 11 16:12:59 2021 +0200
+
+    509 Add "--field-prefix AUTO" as asn1 compiler parameter
+
+[33mcommit 2f357dfbd43b545a32537f00cab3955dc689903f[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu May 6 08:17:47 2021 +0200
+
+    DVE: Load DVE data from xml
+
+[33mcommit 37bf53f5905828f3519454eaf809db35efa92e07[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed May 5 13:12:12 2021 +0200
+
+    504 Fix crash with MSC create messages
+
+[33mcommit a11f9d85e24f00aed0d86213913647fbfc54782a[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed May 5 09:52:55 2021 +0200
+
+    390 Small manual test fixes
+
+[33mcommit 2eb4a184df04d6c9700bb63848dfdf72121ff586[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 4 17:42:28 2021 +0200
+
+    390 Add manual test descriptions
+
+[33mcommit e57357dbda27ddebf039ee1106733eb11ad407fa[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 4 17:22:55 2021 +0200
+
+    474 Improve readability
+
+[33mcommit 003d3f3e0da419ae0e82482b4ea67343bca5af87[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue May 4 17:31:36 2021 +0200
+
+    IVE: Mapping position of interface for Instance Function from
+    FunctionType
+
+[33mcommit 5397214048894c26497170de338e677cdea0250b[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue May 4 13:30:04 2021 +0200
+
+    474 Code simplification
+
+[33mcommit afc343ed387098e5b665adeb824cc23cc602c8f3[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Mon May 3 15:28:16 2021 +0200
+
+    474 Remove global index add function for msc event
+
+[33mcommit b58d1d5ca31b0b79ed90c4d458ba3aba1871f00e[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Mon May 3 15:09:43 2021 +0200
+
+    474 Use index per instance for deleting msc events
+
+[33mcommit cd72e00242bd20d19587a9d4a09b8ffebdc3a9ce[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Mon May 3 12:31:16 2021 +0200
+
+    474 Use per instance index in msc tests
+
+[33mcommit 8f5e3f9134319f402715b7bc853765e7f317a634[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri Apr 30 16:37:07 2021 +0200
+
+    474 Use per instance index when loading msc files
+
+[33mcommit 914fc9e4a7159f6eb395483675924f191fbe92a7[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Fri Apr 30 12:49:25 2021 +0200
+
+    IVE: Scene shifting & Interface renaming fixed
+
+[33mcommit e376a1ea900f6fd3951e1139ee8247ba03c7ee04[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Fri Apr 30 08:58:16 2021 +0200
+
+    474 Add msc message by the instance index
+
+[33mcommit 80ef551ae8bdb1756ef543b2ca2036b314d20692[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu Apr 29 12:01:32 2021 +0200
+
+    474 Add msc condition by the instance index
+
+[33mcommit 62eb37c64e4b1ff35132e828602334990846fdd2[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed Apr 28 15:48:24 2021 +0200
+
+    474 Add msc comment by the instance index
+
+[33mcommit 9fd77c00ded5a6f3d0ab75e78209441e06516b0f[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed Apr 28 13:42:24 2021 +0200
+
+    474 Add msc coregion by the instance index
+
+[33mcommit 0802381516d425624976452108568e184a6948c2[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed Apr 28 12:12:59 2021 +0200
+
+    474 Add msc timer by the instance index
+
+[33mcommit eba7dad6238675ace21222c362c0ba6be43cf3c4[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Tue Apr 27 19:25:55 2021 +0300
+
+    IVE: Property type is used instead of attribute for Taste::Autonamed
+    after changing Required Interface name
+
+[33mcommit 9608dc045781048196f22a8fd0de0a5e6decfbef[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Tue Apr 27 15:46:14 2021 +0200
+
+    485: Add msc action by the instance index
+
+[33mcommit 4eca54c15aaf79eedc47c2219e361c13cc4852af[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Mon Apr 26 22:31:54 2021 +0300
+
+    IVE: Setting initial type for Interface parameter
+
+[33mcommit 4eb8d4f819b666bc80b007f18ea430ac74982783[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Mon Apr 26 18:51:39 2021 +0300
+
+    IVE: Coordinates not updated fix
+
+[33mcommit 6226ca824f893ec2e4e41d3a67c27d8178e6a84c[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Mon Apr 26 12:36:47 2021 +0200
+
+    485 On default MSC instance names ask to add in IVE model
+
+[33mcommit 11170ed245fcf43e22a2b5bbe0cb31692447c3e5[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Mon Apr 26 07:37:54 2021 +0200
+
+    Revert "IVE: Preparing Function(Type) graphics item for name editing after"
+    
+    This reverts commit 7b19fd4ad0896dc5253127ad89c688da47c08100.
+
+[33mcommit 0d98883330a2c0c23b430c0999da56c3f9087858[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu Apr 22 21:19:01 2021 +0300
+
+    IVE: Preparing Entity name for editing after Property Dialog opening
+
+[33mcommit 4f1f846685342e9c6c23b5cc6920936867de6056[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Fri Apr 23 13:29:34 2021 +0300
+
+    IVE: Adding Timer to Context Parameters list
+
+[33mcommit ee27a1a5dc04866c94dc9c4b70cb9a45bcb59193[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu Apr 22 18:43:34 2021 +0300
+
+    IVE: Unifing the way of Interface and Connection last segment movement
+
+[33mcommit 7b19fd4ad0896dc5253127ad89c688da47c08100[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu Apr 22 20:59:33 2021 +0300
+
+    IVE: Preparing Function(Type) graphics item for name editing after
+    creation
+
+[33mcommit 7506b53c165879de24f76f1b1a0e6f51d6ae2f2a[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu Apr 22 15:50:23 2021 +0200
+
+    VE: Refactor aadl classes
+
+[33mcommit 39c9369debceeca4be3f76bfb4dfede3aa4f4555[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Fri Apr 16 15:20:36 2021 +0300
+
+    IVE: Interface click area is extended
+
+[33mcommit 66ebdc689a49f9003ce44bcc33d9dd6907a95ace[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu Apr 15 16:14:55 2021 +0200
+
+    Rename ivconverter back to aadlconverter
+
+[33mcommit 77596b70e46e8a54e290cf5c807d6e430c74bf7c[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu Apr 15 15:39:53 2021 +0200
+
+    486 Do not try to add messages if the IV functions are missing
+
+[33mcommit cdfb4e5ff0f706ec7e67f580cea3f51117288c70[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu Apr 15 14:15:53 2021 +0200
+
+    487 Fix instance and message check in SpaceCreator
+
+[33mcommit 4af707c83d32f42d20ab760518b41ae1d6e58209[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Thu Apr 15 11:42:06 2021 +0200
+
+    488 Avoid sub-pixel moves
+
+[33mcommit e27ff9ea0ed464c1018bad9397e57d164cde76fc[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Thu Apr 15 07:46:46 2021 +0200
+
+    IVE: [Refactoring]
+
+[33mcommit 561e095a1623644d7f74faa040228df1f338f3e0[m
+Author: Alex Diev <alex.diev@vikingsoftware.com>
+Date:   Wed Apr 14 16:48:13 2021 +0200
+
+    VE: Refactor aadl classes
+
+[33mcommit a75475618a914232fe9cf94a9c2bce6d73eaae4c[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed Apr 14 14:00:54 2021 +0200
+
+    478: Fix msc chart for created and stopped instances
+
+[33mcommit 4ed0ec75f57f7b54980f2e2af2ca46ede8cb2178[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed Apr 14 14:15:47 2021 +0200
+
+    480 Rename msclibrary into msccore
+
+[33mcommit 16f53756a88848218d9bce42dbf73885c0a888ed[m
+Author: Guenter Schwann <guenter@vikingsoftware.com>
+Date:   Wed Apr 14 15:28:39 2021 +0200
+
+    481 Check for QtCreator binaries in arm directory as well
+
+[33mcommit aaf67

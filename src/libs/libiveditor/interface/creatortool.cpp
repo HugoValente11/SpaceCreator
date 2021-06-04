@@ -26,6 +26,7 @@
 #include "commands/cmdfunctionitemcreate.h"
 #include "commands/cmdfunctiontypeitemcreate.h"
 #include "commands/cmdinterfaceitemcreate.h"
+#include "commands/cmdmyfunctionitemcreate.h"
 #include "commandsstack.h"
 #include "connectioncreationvalidator.h"
 #include "context/action/actionsmanager.h"
@@ -87,6 +88,7 @@ struct CreatorTool::CreatorToolPrivate {
 
     void handleToolType(CreatorTool::ToolType type, const QPointF &pos);
     void handleComment(QGraphicsScene *scene, const QPointF &pos);
+    void handleMyFunction(QGraphicsScene *scene, const QPointF &pos);
     void handleFunctionType(QGraphicsScene *scene, const QPointF &pos);
     void handleFunction(QGraphicsScene *scene, const QPointF &pos);
     void handleInterface(QGraphicsScene *scene, ivm::IVInterface::InterfaceType type, const QPointF &pos);
@@ -612,6 +614,9 @@ void CreatorTool::CreatorToolPrivate::populateContextMenu_commonCreate(QMenu *me
         action = menu->addAction(QIcon(QLatin1String(":/tab_interface/toolbar/icns/comment.svg")),
                 thisTool->tr("Comment"), thisTool, [this, scenePos]() { handleToolType(ToolType::Comment, scenePos); });
 
+        action = menu->addAction(QIcon(QLatin1String(":/tab_interface/toolbar/icns/comment.svg")),
+                thisTool->tr("My Function action"), thisTool, [this, scenePos]() { handleToolType(ToolType::MyFunction, scenePos); });
+
         action = menu->addAction(QIcon(QLatin1String(":/tab_interface/toolbar/icns/ri.svg")),
                 thisTool->tr("Required Interface"), thisTool,
                 [this, scenePos]() { handleToolType(ToolType::RequiredInterface, scenePos); });
@@ -747,6 +752,9 @@ void CreatorTool::CreatorToolPrivate::handleToolType(CreatorTool::ToolType type,
         case ToolType::Function:
             handleFunction(scene, pos);
             break;
+        case ToolType::MyFunction:
+            handleMyFunction(scene, pos);
+            break;
         case ToolType::ProvidedInterface:
             handleInterface(scene, ivm::IVInterface::InterfaceType::Provided, pos);
             break;
@@ -795,6 +803,30 @@ void CreatorTool::CreatorToolPrivate::handleComment(QGraphicsScene *scene, const
             }
         }
         auto cmd = new cmd::CmdCommentItemCreate(model->objectsModel(), parentObject, itemSceneRect);
+        doc->commandsStack()->push(cmd);
+    }
+}
+
+void CreatorTool::CreatorToolPrivate::handleMyFunction(QGraphicsScene *scene, const QPointF &pos)
+{
+    Q_UNUSED(scene)
+    Q_UNUSED(pos)
+
+    if (this->previewItem) {
+        ivm::IVFunctionType *parentObject = gi::functionObject(this->previewItem->parentItem());
+        if (!parentObject)
+            parentObject = gi::functionTypeObject(this->previewItem->parentItem());
+
+        QRectF itemSceneRect = adjustToSize(this->previewItem->mapRectToScene(this->previewItem->rect()),
+                shared::graphicsviewutils::kDefaultGraphicsItemSize);
+        if (auto parentItem = previewItem->parentItem()) {
+            if (!parentItem->sceneBoundingRect()
+                            .marginsRemoved(shared::graphicsviewutils::kRootMargins)
+                            .contains(itemSceneRect)) {
+                itemSceneRect = QRectF();
+            }
+        }
+        auto cmd = new cmd::CmdMyFunctionItemCreate(model->objectsModel(), parentObject, itemSceneRect);
         doc->commandsStack()->push(cmd);
     }
 }

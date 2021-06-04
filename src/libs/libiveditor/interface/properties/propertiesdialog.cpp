@@ -82,6 +82,8 @@ QString PropertiesDialog::objectTypeName() const
         return tr("Function Type");
     case ivm::IVObject::Type::Function:
         return tr("Function");
+    case ivm::IVObject::Type::MyFunction:
+        return tr("My Function");
     case ivm::IVObject::Type::RequiredInterface:
         return tr("RI");
     case ivm::IVObject::Type::ProvidedInterface:
@@ -110,6 +112,7 @@ void PropertiesDialog::initTabs()
 
     switch (m_dataObject->type()) {
     case ivm::IVObject::Type::FunctionType:
+    case ivm::IVObject::Type::MyFunction:
     case ivm::IVObject::Type::Function: {
         initContextParams();
         initAttributesView();

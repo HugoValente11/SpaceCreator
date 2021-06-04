@@ -46,6 +46,7 @@ public:
         ProvidedInterface,
         InterfaceGroup,
         Comment,
+        MyFunction,
         Connection,
         ConnectionGroup,
     };
@@ -69,6 +70,7 @@ public:
 
     IVObject *parentObject() const override;
     bool isFunction() const;
+    bool isMyFunction() const;
     bool isFunctionType() const;
     bool isInterfaceGroup() const;
     bool isRequiredInterface() const;

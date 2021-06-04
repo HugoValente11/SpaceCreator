@@ -1024,6 +1024,14 @@ QVector<QAction *> InterfaceDocument::initActions()
             [this]() { d->tool->setCurrentToolType(CreatorTool::ToolType::Comment); });
     actCreateComment->setIcon(QIcon(":/tab_interface/toolbar/icns/comment.svg"));
 
+    auto actMyFunction = new QAction(tr("My Function"));
+    ActionsManager::registerAction(Q_FUNC_INFO, actMyFunction, "My Function", "Create My Function object");
+    actMyFunction->setCheckable(true);
+    actMyFunction->setActionGroup(actionGroup);
+    connect(actMyFunction, &QAction::triggered, this,
+            [this]() { d->tool->setCurrentToolType(CreatorTool::ToolType::MyFunction); });
+    actMyFunction->setIcon(QIcon(":/tab_interface/toolbar/icns/pokemon.svg"));
+
     auto actCreateConnection = new QAction(tr("Connection"));
     ActionsManager::registerAction(Q_FUNC_INFO, actCreateConnection, "Connection", "Create Connection object");
     actCreateConnection->setCheckable(true);
@@ -1076,7 +1084,7 @@ QVector<QAction *> InterfaceDocument::initActions()
     });
     d->actExitToParent->setIcon(QIcon(":/tab_interface/toolbar/icns/exit_parent.svg"));
 
-    d->m_toolbarActions = { actCreateFunctionType, actCreateFunction, actCreateProvidedInterface,
+    d->m_toolbarActions = { actCreateFunctionType, actCreateFunction, actCreateProvidedInterface, actMyFunction,
         actCreateRequiredInterface, actCreateComment, actCreateConnection, d->actCreateConnectionGroup, d->actRemove,
         d->actZoomIn, d->actZoomOut, d->actExitToRoot, d->actExitToParent };
 

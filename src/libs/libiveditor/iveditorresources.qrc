@@ -12,5 +12,6 @@
         <file>templating/xml_templates/interfaceview.tmplt</file>
         <file>templating/xml_templates/connectiongroup.tmplt</file>
         <file>templating/xml_templates/connectiongroups.tmplt</file>
+        <file>templating/xml_templates/myfunction.tmplt</file>
     </qresource>
 </RCC>

@@ -45,6 +45,7 @@ public:
         Comment,
         Source,
         Target,
+        MyFunction,
 
         // attrs:
         name,

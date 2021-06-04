@@ -26,6 +26,7 @@
 #include "ivconnectiongroup.h"
 #include "ivfunctiontype.h"
 #include "ivobject.h"
+#include "ivmyfunction.h"
 
 namespace ive {
 
@@ -55,6 +56,7 @@ QVariant ExportableIVObject::createFrom(const ivm::IVObject *ivObject)
     case ivm::IVObject::Type::RequiredInterface:
     case ivm::IVObject::Type::ProvidedInterface:
         return QVariant::fromValue(ExportableIVInterface(static_cast<const ivm::IVInterface *>(ivObject)));
+    case ivm::IVObject::Type::MyFunction:
     case ivm::IVObject::Type::Comment:
         return QVariant::fromValue(ExportableIVObject(ivObject));
     case ivm::IVObject::Type::Connection:

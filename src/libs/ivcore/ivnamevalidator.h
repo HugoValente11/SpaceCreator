@@ -62,6 +62,8 @@ private:
     QString nameRequiredInterface(const IVObject *iface) const;
     QString nameProvidedInterface(const IVObject *iface) const;
     QString nameComment(const IVObject *comment) const;
+    QString nameMyFunction(const IVObject *comment) const;
+
     QString nameConnection(const IVObject *connection) const;
 
     bool isFunctionTypeNameUsed(const QString &name, const IVObject *fnType) const;

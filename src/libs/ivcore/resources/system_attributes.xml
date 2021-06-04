@@ -15,6 +15,7 @@
             </Enumeration>
         </Type>
         <Scopes>
+            <MyFunction/>
             <Required_Interface/>
             <Provided_Interface/>
         </Scopes>
@@ -27,6 +28,7 @@
             </Enumeration>
         </Type>
         <Scopes>
+            <MyFunction/>
             <Function/>
         </Scopes>
     </Attr>
@@ -80,6 +82,22 @@
         </Type>
         <Scopes>
             <Required_Interface/>
+        </Scopes>
+    </Attr>
+    <Attr name="Type">
+        <Type>
+            <String/>
+        </Type>
+        <Scopes>
+            <MyFunction/>
+        </Scopes>
+    </Attr>
+    <Attr name="Number">
+        <Type>
+            <String/>
+        </Type>
+        <Scopes>
+            <MyFunction/>
         </Scopes>
     </Attr>
 </Attrs>

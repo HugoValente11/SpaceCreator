@@ -63,6 +63,8 @@ target_sources(${LIB_NAME} PRIVATE
     interface/ivfunctiontypegraphicsitem.cpp
     interface/ivfunctiontypegraphicsitem.h
     interface/ivinterfacegraphicsitem.cpp
+    interface/ivmyfunctiongraphicsitem.h
+    interface/ivmyfunctiongraphicsitem.cpp
     interface/ivinterfacegraphicsitem.h
     interface/ivinterfacegroupgraphicsitem.cpp
     interface/ivinterfacegroupgraphicsitem.h
@@ -74,6 +76,8 @@ target_sources(${LIB_NAME} PRIVATE
     interface/commands/cmdchangeasn1file.h
     interface/commands/cmdcommentitemcreate.cpp
     interface/commands/cmdcommentitemcreate.h
+    interface/commands/cmdmyfunctionitemcreate.h
+    interface/commands/cmdmyfunctionitemcreate.cpp
     interface/commands/cmdconnectiongroupitemchange.cpp
     interface/commands/cmdconnectiongroupitemchange.h
     interface/commands/cmdconnectiongroupitemcreate.cpp

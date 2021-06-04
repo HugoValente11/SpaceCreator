@@ -15,6 +15,8 @@ target_sources(${LIB_NAME} PRIVATE
     ivobject.h
     ivcomment.cpp
     ivcomment.h
+    ivmyfunction.h
+    ivmyfunction.cpp
     ivconnection.cpp
     ivconnection.h
     ivconnectiongroup.cpp

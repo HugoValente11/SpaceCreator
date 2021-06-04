@@ -24,6 +24,7 @@
 #include "ivfunctiontype.h"
 #include "ivmodel.h"
 #include "ivobject.h"
+#include "ivmyfunction.h"
 
 #include <QDebug>
 #include <QDir>
@@ -37,7 +38,7 @@ static const QString namePatternUI("^[a-zA-Z][\\w ]*(?(?<=_)[a-zA-Z0-9])$");
 
 IVNameValidator::IVNameValidator()
     : m_typePrefixes {
-        { IVObject::Type::FunctionType, QObject::tr("Function_Type_") },
+        { IVObject::Type::FunctionType, QObject::tr("Function_Moin_Type_") },
         { IVObject::Type::Function, QObject::tr("Function_") },
         { IVObject::Type::RequiredInterface, QObject::tr("RI_") },
         { IVObject::Type::ProvidedInterface, QObject::tr("PI_") },
@@ -45,6 +46,8 @@ IVNameValidator::IVNameValidator()
         { IVObject::Type::Comment, QObject::tr("Comment_") },
         { IVObject::Type::Connection, QObject::tr("Connection_") },
         { IVObject::Type::ConnectionGroup, QObject::tr("Connection_Group_") },
+        { IVObject::Type::MyFunction, QObject::tr("Harooo_") },
+
     }
 {
 }
@@ -65,6 +68,7 @@ QString IVNameValidator::encodeName(const IVObject::Type t, const QString &name)
     case IVObject::Type::ConnectionGroup:
     case IVObject::Type::Connection:
     case IVObject::Type::Function:
+    case IVObject::Type::MyFunction:
     case IVObject::Type::FunctionType:
     case ivm::IVObject::Type::ProvidedInterface:
     case ivm::IVObject::Type::RequiredInterface: {
@@ -100,6 +104,7 @@ QString IVNameValidator::decodeName(const IVObject::Type t, const QString &name)
     case IVObject::Type::ConnectionGroup:
     case IVObject::Type::Connection:
     case IVObject::Type::Function:
+    case IVObject::Type::MyFunction:
     case IVObject::Type::FunctionType:
     case ivm::IVObject::Type::ProvidedInterface:
     case ivm::IVObject::Type::RequiredInterface: {
@@ -196,6 +201,7 @@ bool IVNameValidator::isAcceptableName(const IVObject *object, const QString &na
     case IVObject::Type::Function: {
         return !instance()->isFunctionNameUsed(name, object);
     }
+
     case IVObject::Type::RequiredInterface: {
         return !instance()->isRequiredInterfaceNameUsed(name, object);
     }
@@ -205,6 +211,7 @@ bool IVNameValidator::isAcceptableName(const IVObject *object, const QString &na
     case IVObject::Type::InterfaceGroup:
     case IVObject::Type::ConnectionGroup:
     case IVObject::Type::Connection:
+    case IVObject::Type::MyFunction:
     case IVObject::Type::Comment: {
         return true;
     }
@@ -284,6 +291,7 @@ QString IVNameValidator::nameOfType(IVObject::Type t)
 {
     switch (t) {
     case IVObject::Type::Function:
+    case IVObject::Type::MyFunction:
     case IVObject::Type::FunctionType:
     case IVObject::Type::InterfaceGroup:
     case IVObject::Type::RequiredInterface:
@@ -331,6 +339,8 @@ QString IVNameValidator::nextName(const IVObject *object) const
         return nameProvidedInterface(object);
     case IVObject::Type::Comment:
         return nameComment(object);
+    case IVObject::Type::MyFunction:
+        return nameMyFunction(object);
     case IVObject::Type::ConnectionGroup:
     case IVObject::Type::Connection:
         return nameConnection(object);
@@ -352,12 +362,14 @@ QString IVNameValidator::makeCountedName(const IVObject *object, const QString &
         name = nameTemplate + QString::number(++counter);
     }
     return name;
+
 }
 
 QString IVNameValidator::nameFunctionType(const IVObject *functionType) const
 {
     const QString nameTemplate =
             functionType->title().isEmpty() ? m_typePrefixes[functionType->type()] : functionType->title();
+
 
     int counter = 0;
     if (functionType && functionType->model()) {
@@ -427,6 +439,23 @@ QString IVNameValidator::nameComment(const IVObject *comment) const
     if (comment && comment->model()) {
         for (const auto fn : comment->model()->objects())
             if (qobject_cast<ivm::IVComment *>(fn))
+                ++counter;
+    } else
+        counter = 0;
+    ++counter;
+
+    return makeCountedName(comment, nameTemplate, counter);
+}
+
+
+QString IVNameValidator::nameMyFunction(const IVObject *comment) const
+{
+    const QString nameTemplate = comment->title().isEmpty() ? m_typePrefixes[comment->type()] : comment->title();
+
+    int counter = 0;
+    if (comment && comment->model()) {
+        for (const auto fn : comment->model()->objects())
+            if (qobject_cast<ivm::IVMyFunction *>(fn))
                 ++counter;
     } else
         counter = 0;

@@ -166,6 +166,11 @@ bool IVObject::isFunction() const
     return type() == Type::Function;
 }
 
+bool IVObject::isMyFunction() const
+{
+    return type() == Type::MyFunction;
+}
+
 bool IVObject::isFunctionType() const
 {
     return type() == Type::FunctionType;

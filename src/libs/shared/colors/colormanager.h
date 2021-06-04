@@ -44,6 +44,7 @@ public:
         IfaceGroup = 8,
         ConnectionFlow = 9,
         FunctionScale = 10,
+        MyFunction = 11,
 
         // MSC
         InstanceLine = 1001,

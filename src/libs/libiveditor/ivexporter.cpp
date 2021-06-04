@@ -110,6 +110,8 @@ QString IVExporter::groupName(const shared::VEObject *object) const
             return QStringLiteral("Connections");
         case ivm::IVObject::Type::ConnectionGroup:
             return QStringLiteral("ConnectionGroups");
+        case ivm::IVObject::Type::MyFunction:
+            return QStringLiteral("MyFunctions");
         default:
             break;
         }

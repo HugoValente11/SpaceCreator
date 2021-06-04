@@ -36,6 +36,7 @@ public:
     PropertyTemplate *propertyTemplateForObject(const ivm::IVObject *obj, const QString &name) const;
     QList<PropertyTemplate *> propertyTemplatesForObject(const ivm::IVObject *obj) const;
     QList<PropertyTemplate *> attributesForFunction() const;
+    QList<PropertyTemplate *> attributesForMyFunction() const;
     QList<PropertyTemplate *> attributesForRequiredInterface() const;
     QList<PropertyTemplate *> attributesForProvidedInterface() const;
 

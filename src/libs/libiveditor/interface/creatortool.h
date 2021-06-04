@@ -51,6 +51,7 @@ public:
     {
         Pointer = 0,
         Function,
+        MyFunction,
         FunctionType,
         Comment,
         ProvidedInterface,

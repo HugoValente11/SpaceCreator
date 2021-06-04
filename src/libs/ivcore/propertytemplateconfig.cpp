@@ -62,11 +62,14 @@ struct PropertyTemplateConfig::PropertyTemplateConfigPrivate {
         collectUniqeAttributes(m_function, uniqeAttrs);
         collectUniqeAttributes(m_reqIface, uniqeAttrs);
         collectUniqeAttributes(m_provIface, uniqeAttrs);
+        collectUniqeAttributes(m_myFunction, uniqeAttrs);
+
 
         qDeleteAll(uniqeAttrs);
         m_function.clear();
         m_reqIface.clear();
         m_provIface.clear();
+        m_myFunction.clear();
 
         for (PropertyTemplate *attr : attrs) {
             if (attr->scope() == PropertyTemplate::Scopes(PropertyTemplate::Scope::None))
@@ -75,16 +78,21 @@ struct PropertyTemplateConfig::PropertyTemplateConfigPrivate {
             if (attr->scope().testFlag(PropertyTemplate::Scope::Function))
                 m_function.append(attr);
 
+            if (attr->scope().testFlag(PropertyTemplate::Scope::MyFunction))
+                m_myFunction.append(attr);
+
             if (attr->scope().testFlag(PropertyTemplate::Scope::Required_Interface))
                 m_reqIface.append(attr);
 
             if (attr->scope().testFlag(PropertyTemplate::Scope::Provided_Interface))
                 m_provIface.append(attr);
         }
+
     }
 
     QString m_configPath;
     QList<PropertyTemplate *> m_function;
+    QList<PropertyTemplate *> m_myFunction;
     QList<PropertyTemplate *> m_reqIface;
     QList<PropertyTemplate *> m_provIface;
 };
@@ -209,6 +217,8 @@ QList<PropertyTemplate *> PropertyTemplateConfig::propertyTemplatesForObject(con
         return d->m_reqIface;
     case ivm::IVObject::Type::ProvidedInterface:
         return d->m_provIface;
+    case ivm::IVObject::Type::MyFunction:
+        return d->m_myFunction;
     default:
         return {};
     }
@@ -217,6 +227,11 @@ QList<PropertyTemplate *> PropertyTemplateConfig::propertyTemplatesForObject(con
 QList<PropertyTemplate *> PropertyTemplateConfig::attributesForFunction() const
 {
     return d->m_function;
+}
+
+QList<PropertyTemplate *> PropertyTemplateConfig::attributesForMyFunction() const
+{
+    return d->m_myFunction;
 }
 
 QList<PropertyTemplate *> PropertyTemplateConfig::attributesForRequiredInterface() const

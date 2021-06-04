@@ -173,7 +173,7 @@ void IVFunctionTypeGraphicsItem::updateNameFromUi(const QString &name)
         return;
     }
 
-    const QString newName = ivm::IVNameValidator::encodeName(entity()->type(), name);
+    QString newName = ivm::IVNameValidator::encodeName(entity()->type(), name);
     if (!ivm::IVNameValidator::isAcceptableName(entity(), newName)) {
         updateText();
         return;
@@ -182,6 +182,8 @@ void IVFunctionTypeGraphicsItem::updateNameFromUi(const QString &name)
         updateText();
         return;
     }
+
+    newName = QString("Before QVariant?");
 
     const QVariantHash attributess = { { ivm::meta::Props::token(ivm::meta::Props::Token::name), newName } };
     const auto attributesCmd = new cmd::CmdEntityAttributeChange(entity(), attributess);
