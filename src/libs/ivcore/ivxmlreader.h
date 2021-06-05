@@ -33,6 +33,7 @@ namespace ivm {
 class IVInterface;
 class IVFunctionType;
 class IVComment;
+class IVMyFunction;
 class IVConnection;
 class IVConnectionGroup;
 struct IVXMLReaderPrivate;
@@ -54,6 +55,7 @@ private:
     const std::unique_ptr<IVXMLReaderPrivate> d;
 
     IVFunctionType *addFunction(const QString &name, IVObject::Type fnType);
+    IVMyFunction *addMyFunction(const QString &name);
     IVInterface *addIface(const QString &name, bool isRI);
     IVComment *addComment(const QString &text);
     IVConnection *addConnection();

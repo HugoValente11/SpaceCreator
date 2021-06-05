@@ -26,6 +26,7 @@
 #include "ivinterface.h"
 #include "ivinterfacegroup.h"
 #include "parameter.h"
+#include "ivmyfunction.h"
 
 #include <QDebug>
 #include <QFile>
@@ -70,6 +71,7 @@ struct CurrentObjectHolder {
     {
         m_object = object;
         m_function = m_object ? m_object->as<IVFunctionType *>() : nullptr;
+        m_myFunction = m_object ? m_object->as<IVMyFunction *>() : nullptr;
         m_iface = m_object ? m_object->as<IVInterface *>() : nullptr;
         m_comment = m_object ? m_object->as<IVComment *>() : nullptr;
         m_connection = m_object ? m_object->as<IVConnection *>() : nullptr;
@@ -78,6 +80,8 @@ struct CurrentObjectHolder {
 
     QPointer<IVObject> get() { return m_object; }
     QPointer<IVFunctionType> function() { return m_function; }
+    QPointer<IVMyFunction> myFunction() { return m_myFunction; }
+
     QPointer<IVInterface> iface() { return m_iface; }
     QPointer<IVComment> comment() { return m_comment; }
     QPointer<IVConnection> connection() { return m_connection; }
@@ -88,6 +92,7 @@ struct CurrentObjectHolder {
 private:
     QPointer<IVObject> m_object { nullptr };
     QPointer<IVFunctionType> m_function { nullptr };
+    QPointer<IVMyFunction> m_myFunction { nullptr };
     QPointer<IVInterface> m_iface { nullptr };
     QPointer<IVComment> m_comment { nullptr };
     QPointer<IVConnection> m_connection { nullptr };
@@ -268,6 +273,11 @@ void IVXMLReader::processTagOpen(QXmlStreamReader &xml)
         obj = addComment(nameAttr.m_value);
         break;
     }
+
+    case Props::Token::MyFunction: {
+        obj = addMyFunction(nameAttr.m_value);
+        break;
+    }
     case Props::Token::Property: {
         if (d->m_currentObject.isValid()) {
             d->m_currentObject.get()->setEntityProperty(
@@ -309,6 +319,7 @@ void IVXMLReader::processTagClose(QXmlStreamReader &xml)
     const QString &tagName = xml.name().toString();
     switch (Props::token(tagName)) {
     case Props::Token::Function:
+    case Props::Token::MyFunction:
     case Props::Token::Required_Interface:
     case Props::Token::Provided_Interface:
     case Props::Token::ConnectionGroup:
@@ -368,6 +379,15 @@ IVComment *IVXMLReader::addComment(const QString &text)
         d->m_currentObject.function()->addChild(comment);
 
     return comment;
+}
+
+IVMyFunction *IVXMLReader::addMyFunction(const QString &text)
+{
+    IVMyFunction *myFunction = new IVMyFunction(text, d->m_currentObject.get());
+    if (d->m_currentObject.function())
+        d->m_currentObject.function()->addChild(myFunction);
+
+    return myFunction;
 }
 
 IVConnection *IVXMLReader::addConnection()

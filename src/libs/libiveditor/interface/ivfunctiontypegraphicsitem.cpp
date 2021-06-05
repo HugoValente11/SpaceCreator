@@ -183,7 +183,6 @@ void IVFunctionTypeGraphicsItem::updateNameFromUi(const QString &name)
         return;
     }
 
-    newName = QString("Before QVariant?");
 
     const QVariantHash attributess = { { ivm::meta::Props::token(ivm::meta::Props::Token::name), newName } };
     const auto attributesCmd = new cmd::CmdEntityAttributeChange(entity(), attributess);

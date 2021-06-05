@@ -94,8 +94,8 @@ QString ColorManager::handledColorTypeName(HandledColors t)
         return tr("Comment");
     case FunctionScale:
         return tr("Scaled nested content");
-//    case MyFunction:
-//        return tr("This is the text for my function");
+    case MyFunction:
+        return tr("This is the text for my function");
 
     case InstanceLine:
         return tr("Instance line");

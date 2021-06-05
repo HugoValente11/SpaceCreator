@@ -19,3 +19,4 @@ examples/*.local.msc
 doc/doxygen
 
 asn1scc/
+build/
