@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     ive::initIVEditor();
     shared::initSharedLibrary();
 
+
     QCoreApplication a(argc, argv);
     a.setOrganizationName(SC_ORGANISATION);
     a.setOrganizationDomain(SC_ORGANISATION_DOMAIN);
