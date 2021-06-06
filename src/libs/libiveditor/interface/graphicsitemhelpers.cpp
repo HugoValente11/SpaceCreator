@@ -26,6 +26,7 @@
 #include "interface/ivfunctiongraphicsitem.h"
 #include "interface/ivfunctiontypegraphicsitem.h"
 #include "interface/ivinterfacegraphicsitem.h"
+#include "interface/ivmyfunctiongraphicsitem.h"
 #include "ivcomment.h"
 #include "ivconnection.h"
 #include "ivfunction.h"
@@ -174,6 +175,8 @@ QList<int> knownGraphicsItemTypes()
         case ivm::IVObject::Type::FunctionType:
             itemType = ive::IVFunctionTypeGraphicsItem::Type;
             break;
+        case ivm::IVObject::Type::MyFunction:
+            itemType = ive::IVMyFunctionGraphicsItem::Type;
         case ivm::IVObject::Type::InterfaceGroup:
         case ivm::IVObject::Type::ProvidedInterface:
         case ivm::IVObject::Type::RequiredInterface:

@@ -95,7 +95,7 @@ void IVVisualizationModelBase::updateItemData(QStandardItem *item, shared::VEObj
         pix = icon;
     } break;
     case ivm::IVObject::Type::MyFunction: {
-        static const QPixmap icon = QIcon(QLatin1String(":/tab_interface/toolbar/icns/pokemon.svg")).pixmap(16, 16);
+        static const QPixmap icon = QIcon(QLatin1String(":/tab_interface/toolbar/icns/pok.svg")).pixmap(16, 16);
         pix = icon;
     } break;
     case ivm::IVObject::Type::ConnectionGroup: {

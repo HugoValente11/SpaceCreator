@@ -61,6 +61,8 @@ public:
         group_name,
         func_name,
         is_visible,
+        Number,
+        Type,
 
         // KNOWN TASTE props:
         coordinates,

@@ -1030,7 +1030,7 @@ QVector<QAction *> InterfaceDocument::initActions()
     actMyFunction->setActionGroup(actionGroup);
     connect(actMyFunction, &QAction::triggered, this,
             [this]() { d->tool->setCurrentToolType(CreatorTool::ToolType::MyFunction); });
-    actMyFunction->setIcon(QIcon(":/tab_interface/toolbar/icns/pokemon.svg"));
+    actMyFunction->setIcon(QIcon(":/tab_interface/toolbar/icns/pok.svg"));
 
     auto actCreateConnection = new QAction(tr("Connection"));
     ActionsManager::registerAction(Q_FUNC_INFO, actCreateConnection, "Connection", "Create Connection object");

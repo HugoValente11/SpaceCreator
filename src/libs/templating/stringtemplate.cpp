@@ -120,7 +120,6 @@ bool StringTemplate::parseFile(
 //    m_engine->addPluginPath(QApplication::applicationDirPath());
     m_engine->addPluginPath(QApplication::applicationDirPath());
     QString myQApplicationPath = QApplication::applicationDirPath();
-    qWarning() << Q_FUNC_INFO << "Application path looking for grantlee" << QApplication::applicationDirPath();
 
     Grantlee::Context context;
     for (auto it = grouppedObjects.cbegin(); it != grouppedObjects.cend(); ++it) {
@@ -128,18 +127,25 @@ bool StringTemplate::parseFile(
         const QVariant v = it.value();
         if (v.canConvert<QVariantList>()) {
             const QVariantList list = v.value<QVariantList>();
+
+            qWarning() << endl << "\n\n\nList:" << list[0] << "\n";
+
             if (list.size() == 1 && list[0].canConvert<QObject *>()) {
                 QObject *obj = list[0].value<QObject *>();
                 context.insert(name, obj);
+                qWarning() << endl << "\n\n\nContext insert objects [name]:" << name << ", obj:" << &obj[0] << "\n";
+
                 continue;
             }
         }
         context.insert(name, v);
+        qWarning() << "Context insert values [name]:" << name << ", value:" << v << "\n\n\n";
+
 
     }
 
     const Grantlee::Template stringTemplate = m_engine->loadByName(fileInfo.fileName());
-    qWarning() << Q_FUNC_INFO << "String template:" << stringTemplate;
+    // qWarning() << "String template:" << stringTemplate;
 
     if (stringTemplate->error()) {
         // Tokenizing or parsing error, or couldn't find custom tags or filters.
@@ -151,11 +157,13 @@ bool StringTemplate::parseFile(
     QString output;
     QTextStream textStream(&output);
     NoEscapeOutputStream outputStream(&textStream, m_doEscape);
+
+    qWarning() << "\n\n\nOutput :" << output << "\n\n\n";
+    qWarning() << "\n\n\nTextStream :" << &textStream << "\n\n\n";
+    qWarning() << "\n\n\nM_doEscape:" << m_doEscape << "\n\n\n";
+
     stringTemplate->render(&outputStream, &context);
     const QString result = output.trimmed();
-
-    qWarning() << Q_FUNC_INFO << "Output stream:" << &outputStream;
-    qWarning() << Q_FUNC_INFO << "Context :" << &context;
 
 
     const QString formatted = formatText(result);

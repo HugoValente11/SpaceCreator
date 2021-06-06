@@ -15,6 +15,8 @@
    along with this program. If not, see <https://www.gnu.org/licenses/lgpl-2.1.html>.
 */
 
+#include "QDebug"
+
 #include "exportableivobject.h"
 
 #include "exportableivconnection.h"
@@ -101,9 +103,13 @@ QVariantList ExportableIVObject::generateProperties(const EntityAttributes &attr
     QVariantList result;
     for (auto it = attributes.cbegin(); it != attributes.cend(); ++it) {
         if (it.value().isProperty() == isProperty) {
+            qWarning() << "\nGenerate properties key :" << it.key() << "\n";
+
             result << QVariant::fromValue(templating::ExportableProperty(it.key(), it.value().value()));
         }
     }
+
+    qWarning() << "\nResult fails here:" << result << "\n";
 
     std::sort(result.begin(), result.end(), [](const QVariant &left_val, const QVariant &right_val) {
         const auto &r = right_val.value<templating::ExportableProperty>();
