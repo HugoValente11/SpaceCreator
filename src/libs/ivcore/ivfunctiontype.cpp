@@ -24,6 +24,7 @@
 #include "ivfunction.h"
 #include "ivinterface.h"
 #include "ivinterfacegroup.h"
+#include "ivmyfunction.h"
 
 #include <QDebug>
 
@@ -36,6 +37,7 @@ struct IVFunctionTypePrivate {
 
     QVector<IVFunctionType *> m_functionTypes;
     QVector<IVFunction *> m_functions;
+    QVector<IVMyFunction *> m_myFunctions;
     QVector<IVInterface *> m_pis;
     QVector<IVInterface *> m_ris;
     QVector<IVInterfaceGroup *> m_ifaceGroups;
@@ -76,6 +78,10 @@ bool IVFunctionType::addChild(IVObject *child)
         }
         case IVObject::Type::Function: {
             d->m_functionTypes.append(child->as<IVFunction *>());
+            break;
+        }
+        case IVObject::Type::MyFunction: {
+            d->m_myFunctions.append(child->as<IVMyFunction *>());
             break;
         }
         case IVObject::Type::InterfaceGroup: {
@@ -132,6 +138,10 @@ bool IVFunctionType::removeChild(IVObject *child)
             d->m_functionTypes.removeAll(child->as<IVFunction *>());
             break;
         }
+        case IVObject::Type::MyFunction: {
+            d->m_myFunctions.removeAll(child->as<IVMyFunction *>());
+            break;
+        }
         case IVObject::Type::InterfaceGroup: {
             d->m_ifaceGroups.removeAll(child->as<IVInterfaceGroup *>());
             break;
@@ -183,6 +193,11 @@ QVector<IVFunctionType *> IVFunctionType::functionTypes() const
 QVector<IVFunction *> IVFunctionType::functions() const
 {
     return d->m_functions;
+}
+
+QVector<IVMyFunction *> IVFunctionType::myFunctions() const
+{
+    return d->m_myFunctions;
 }
 
 QVector<IVConnection *> IVFunctionType::connections() const

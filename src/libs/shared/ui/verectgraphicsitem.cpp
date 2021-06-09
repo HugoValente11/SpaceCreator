@@ -207,6 +207,7 @@ QRectF VERectGraphicsItem::transformedRect(shared::ui::GripPoint *grip, const QP
     }
 
     return rect.normalized();
+
 }
 
 void VERectGraphicsItem::handleGeometryChanged(

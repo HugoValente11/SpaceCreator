@@ -113,7 +113,6 @@ InterfaceDocument::InterfaceDocument(QObject *parent)
     , d(new InterfaceDocumentPrivate)
 {
     d->exporter = new IVExporter(this);
-
     setAsn1ModelStorage(new Asn1Acn::Asn1ModelStorage(this));
 
     d->commandsStack = new cmd::CommandsStack(this);

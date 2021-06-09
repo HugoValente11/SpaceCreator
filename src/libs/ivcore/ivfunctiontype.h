@@ -32,6 +32,7 @@ class IVComment;
 class IVInterface;
 class IVInterfaceGroup;
 class IVConnectionGroup;
+class IVMyFunction;
 
 struct IVFunctionTypePrivate;
 
@@ -52,6 +53,7 @@ public:
 
     QVector<IVFunctionType *> functionTypes() const;
     QVector<IVFunction *> functions() const;
+    QVector<IVMyFunction *> myFunctions() const;
     QVector<IVConnection *> connections() const;
     QVector<IVConnectionGroup *> connectionGroups() const;
     QVector<IVComment *> comments() const;

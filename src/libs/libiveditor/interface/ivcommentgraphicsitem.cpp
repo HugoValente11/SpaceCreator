@@ -104,7 +104,7 @@ void IVCommentGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         return QVector<QPointF> { rect.topRight() + QPointF(0, kMargins),
             rect.topRight() - QPointF(kMargins, -kMargins), rect.topRight() - QPointF(kMargins, 0) };
     };
-    painter->drawPolyline(preparePolyline(br));
+     painter->drawPolyline(preparePolyline(br));
 
     qreal y = kMargins;
     const qreal lineWidth = boundingRect().width() - 2 * kMargins;

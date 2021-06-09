@@ -109,8 +109,6 @@ QVariantList ExportableIVObject::generateProperties(const EntityAttributes &attr
         }
     }
 
-    qWarning() << "\nResult fails here:" << result << "\n";
-
     std::sort(result.begin(), result.end(), [](const QVariant &left_val, const QVariant &right_val) {
         const auto &r = right_val.value<templating::ExportableProperty>();
         const ivm::meta::Props::Token right_token = ivm::meta::Props::token(r.name());

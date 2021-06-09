@@ -185,7 +185,7 @@ void IVItemModel::onObjectsAdded(const QVector<shared::Id> &objectsIds)
         onIVObjectAdded(object);
     }
 
-    updateSceneRect();
+     updateSceneRect();
 }
 
 void IVItemModel::onRootObjectChanged(shared::Id rootId)
@@ -342,7 +342,7 @@ void IVItemModel::updateItem(QGraphicsItem *item)
         iObj->updateFromEntity();
     }
     if (m_mutex->tryLock()) {
-        updateSceneRect();
+         updateSceneRect();
         m_mutex->unlock();
     }
 }
@@ -351,8 +351,8 @@ void IVItemModel::removeItemForObject(shared::Id objectId)
 {
     if (auto item = m_items.take(objectId)) {
         m_graphicsScene->removeItem(item);
-        delete item;
-        updateSceneRect();
+         delete item;
+         updateSceneRect();
     }
 }
 
@@ -499,6 +499,7 @@ void IVItemModel::updateSceneRect()
     }
 }
 
+// Adds item to scene
 QGraphicsItem *IVItemModel::createItemForObject(ivm::IVObject *obj)
 {
     Q_ASSERT(obj);
@@ -578,7 +579,7 @@ QGraphicsItem *IVItemModel::createItemForObject(ivm::IVObject *obj)
         auto myFunction = new IVMyFunctionGraphicsItem(qobject_cast<ivm::IVMyFunction *>(obj), parentItem);
         connect(myFunction, &shared::ui::InteractiveObjectBase::boundingBoxChanged, this,
                 &IVItemModel::scheduleInterfaceTextUpdate);
-        nestedGeomtryConnect(parentItem, myFunction);
+         nestedGeomtryConnect(parentItem, myFunction);
         iObj = myFunction;
     } break;
     case ivm::IVObject::Type::FunctionType: {

@@ -45,13 +45,13 @@ WITH DataView;
 WITH TASTE_IV_Properties;
 
 
-SYSTEM interfaceview
+ABSTRACT interfaceview
 PROPERTIES
    Taste::dataView     => ("DataView");
    TASTE::dataViewPath => ("DataView.aadl");
 END interfaceview;
 
-SYSTEM IMPLEMENTATION interfaceview.others
+ABSTRACT IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
 {% for func in Functions %}
 {% for attr in func.attributes %}
