@@ -1,0 +1,84 @@
+{% comment %}
+Template for generation of XML scheme of the whole interface view.
+The following tags are available in this template:
+Functions           : List of all available NON-nested functions (provided by application)
+func                :   |_ Instance of function
+Connections         : List of all available NON-nested connections (provided by application). Connections between top-level functions;
+conn                :   |_ Instance of connection
+ConnectionGroups    : List of all available NON-nested connection groups (provided by application). Grouped connections between top-level functions;
+conngroups          :   |_ Instance of connection
+Comments            : List of all available NON-nested comments (provided by application)
+comm                :   |_ Instance of comment
+{% endcomment %}
+---------------------------------------------------
+-- AADL2.2
+-- TASTE type interfaceview
+-- 
+-- generated code: do not edit
+---------------------------------------------------
+
+
+-- Write each component 
+{% for func in Functions %}
+	{% for attribute in func.attributes %}
+		{% if attribute.name == "component" %}
+			abstract {{ func.name }}
+				{% if func.interfaces != 0 %}
+					features
+						{% for iface in func.interfaces %}
+						{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
+						{% endfor %}
+				{% endif %}
+				
+			end {{func.name}};
+		{% endif %}
+	{% endfor %}
+{% endfor %}
+
+
+
+-- Write system connected
+system mySystem
+
+end mySystem;
+
+
+
+system implementation mySystem.impl
+	
+{% if Functions|length > 0 %}
+
+  subcomponents
+  	{% for func in Functions %}
+
+    {{func.name}}: abstract {{func.name }};
+	{%endfor%}
+{% endif %}
+
+
+{% for conn in Connections %}
+{{conn.source }} -- Source 
+{{conn.target }}-- Target 
+{{conn.siName }}-- siName 
+{{conn.tiName }}-- tiName 
+{{conn.siIsRequired }} -- siIsRequired 
+{{conn.siIsProvided }} -- siIsProvided 
+{{conn.tiIsRequired }} -- tiIsRequired 
+{{conn.tiIsProvided }} -- tiIsProvided 
+{{ conn.attributes}} --attributes
+  {%endfor%}
+
+{% if Connections|length > 0 %}
+  connections
+  	{% for conn in Connections %}
+  	  	{{conn.source}}_{{conn.target}}_{{conn.siName}}: port {% if conn.siIsRequired%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%} -> {% if conn.siIsProvided%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%}
+  	    {Timing => Immediate;};
+  	
+  	{% endfor %}
+
+
+  {% endif %}
+end mySystem.impl;
+
+
+
