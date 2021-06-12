@@ -17,16 +17,67 @@
 
 #pragma once
 
-#include "ivobject.h"
+#include "ivfunctiontype.h"
+
+#include <QHash>
+#include <QObject>
+#include <QVector>
 
 namespace ivm {
 
-class IVMyFunction : public IVObject
+struct IVMyFunctionPrivate;
+class IVMyFunction : public IVFunctionType
 {
     Q_OBJECT
 public:
-    explicit IVMyFunction(const QString &comment = QString(), QObject *parent = nullptr);
+    explicit IVMyFunction(
+            const QString &title = QString(), QObject *parent = nullptr, const shared::Id &id = shared::InvalidId);
     ~IVMyFunction() override;
+
+    bool postInit(QString *warning = nullptr) override;
+
+    void setInstanceOf(IVFunctionType *fnType);
+    const IVFunctionType *instanceOf() const;
+    bool inheritsFunctionType() const;
+
+protected Q_SLOTS:
+    void reflectAttr(const QString &attrName);
+    void reflectContextParam();
+
+private:
+    const std::unique_ptr<IVMyFunctionPrivate> d;
+
+    struct OriginalPropsHolder {
+        // TODO: unite with IVInterface::OriginalPropsHolder
+        EntityAttributes attrs;
+        QVector<ContextParameter> params;
+
+        QString name() const
+        {
+            const QString attrName = meta::Props::token(meta::Props::Token::name);
+            return attrs.value(attrName).value<QString>();
+        }
+        inline bool collected() const { return m_collected; }
+        inline void collect(const IVMyFunction *src)
+        {
+            if (m_collected || !src)
+                return;
+
+            attrs = src->entityAttributes();
+            params = src->contextParams();
+
+            m_collected = true;
+        }
+
+    private:
+        bool m_collected { false };
+    } m_originalFields;
+
+    void cloneInternals();
+    void restoreInternals();
+
+    void reflectAttrs(const EntityAttributes &attrs);
+    void reflectContextParams(const QVector<ContextParameter> &params);
 };
 
 }

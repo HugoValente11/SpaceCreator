@@ -75,6 +75,10 @@ public:
     QVector<QPointer<IVFunction>> instances() const;
     void rememberInstance(IVFunction *function);
     void forgetInstance(IVFunction *function);
+    QVector<QPointer<IVMyFunction>> myInstances() const;
+    void rememberInstance(IVMyFunction *function);
+    void forgetInstance(IVMyFunction *function);
+
 
 Q_SIGNALS:
     void contextParamsChanged();

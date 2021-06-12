@@ -21,6 +21,7 @@
 #include "ivcomment.h"
 #include "ivconnection.h"
 #include "ivfunction.h"
+#include "ivmyfunction.h"
 #include "ivfunctiontype.h"
 #include "ivnamevalidator.h"
 #include "propertytemplate.h"
@@ -193,6 +194,20 @@ IVFunction *IVModel::getFunction(const QString &name, Qt::CaseSensitivity caseSe
     return qobject_cast<IVFunction *>(getObjectByName(name, IVObject::Type::Function, caseSensitivity));
 }
 
+IVMyFunction *IVModel::getMyFunction(const shared::Id &id) const
+{
+    return qobject_cast<IVMyFunction *>(getObject(id));
+}
+
+/*!
+   Returns the function with the given name.
+   If no such function exists nullptr is returned.
+ */
+IVMyFunction *IVModel::getMyFunction(const QString &name, Qt::CaseSensitivity caseSensitivity) const
+{
+    return qobject_cast<IVMyFunction *>(getObjectByName(name, IVObject::Type::MyFunction, caseSensitivity));
+}
+
 IVFunctionType *IVModel::getFunctionType(const QString &name, Qt::CaseSensitivity caseSensitivity) const
 {
     return qobject_cast<IVFunctionType *>(getObjectByName(name, IVObject::Type::FunctionType, caseSensitivity));
@@ -222,6 +237,49 @@ QHash<QString, IVFunctionType *> IVModel::getAvailableFunctionTypes(const IVFunc
         return result;
 
     auto isValid = [](const IVFunctionType *objFnType, const IVFunction *objFn) {
+        IVObject *objFnTypeParent = objFnType->parentObject();
+
+        if (!objFnTypeParent) // it's a global FunctionType
+            return true;
+
+        IVObject *objFnParent = objFn->parentObject();
+        while (objFnParent) {
+            if (objFnParent == objFnTypeParent)
+                return true;
+            objFnParent = objFnParent->parentObject();
+        }
+        return false;
+    };
+
+    for (auto obj : objects()) {
+        if (IVFunctionType *objFnType = qobject_cast<IVFunctionType *>(obj)) {
+            if (objFnType->isFunctionType() && isValid(objFnType, fnObj)) {
+                result.insert(objFnType->title(), objFnType);
+            }
+        }
+    }
+
+    const auto sharedObjects = d->m_sharedTypesModel->objects();
+    for (auto sharedObject : sharedObjects) {
+        if (sharedObject->parentObject() == nullptr) {
+            if (auto fnType = sharedObject->as<IVFunctionType *>()) {
+                if (fnType->isFunctionType()) {
+                    result[fnType->title()] = fnType;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+QHash<QString, IVFunctionType *> IVModel::getAvailableFunctionTypes(const IVMyFunction *fnObj) const
+{
+    QHash<QString, IVFunctionType *> result;
+    if (!fnObj)
+        return result;
+
+    auto isValid = [](const IVFunctionType *objFnType, const IVMyFunction *objFn) {
         IVObject *objFnTypeParent = objFnType->parentObject();
 
         if (!objFnTypeParent) // it's a global FunctionType

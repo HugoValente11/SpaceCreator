@@ -34,6 +34,7 @@ struct IVFunctionTypePrivate {
     QVector<IVObject *> m_children {};
     QVector<ContextParameter> m_contextParams {};
     QVector<QPointer<IVFunction>> m_instances {};
+    QVector<QPointer<IVMyFunction>> m_myInstances {};
 
     QVector<IVFunctionType *> m_functionTypes;
     QVector<IVFunction *> m_functions;
@@ -261,7 +262,7 @@ QVector<IVInterfaceGroup *> IVFunctionType::interfaceGroups() const
 
 bool IVFunctionType::hasNestedChildren() const
 {
-    return functionTypes().size() || functions().size() || comments().size();
+    return functionTypes().size() || functions().size() || comments().size() || myFunctions().size();
 }
 
 /*!
@@ -347,6 +348,24 @@ void IVFunctionType::forgetInstance(IVFunction *function)
 {
     if (function)
         d->m_instances.removeAll(function);
+}
+
+
+QVector<QPointer<IVMyFunction>> IVFunctionType::myInstances() const
+{
+    return d->m_myInstances;
+}
+
+void IVFunctionType::rememberInstance(IVMyFunction *function)
+{
+    if (function && !myInstances().contains(function))
+        d->m_myInstances.append(function);
+}
+
+void IVFunctionType::forgetInstance(IVMyFunction *function)
+{
+    if (function)
+        d->m_myInstances.removeAll(function);
 }
 
 }

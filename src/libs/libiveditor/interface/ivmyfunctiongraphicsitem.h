@@ -1,67 +1,75 @@
 /*
-  Copyright (C) 2018-2019 European Space Agency - <maxime.perrotin@esa.int>
+ Copyright (C) 2018-2019 European Space Agency - <maxime.perrotin@esa.int>
 
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation; either
-  version 2 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
 
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
 
-  You should have received a copy of the GNU Library General Public License
-  along with this program. If not, see <https://www.gnu.org/licenses/lgpl-2.1.html>.
+ You should have received a copy of the GNU Library General Public License
+ along with this program. If not, see <https://www.gnu.org/licenses/lgpl-2.1.html>.
 */
 
 #pragma once
 
+#include "ivconnectiongraphicsitem.h"
 #include "ivmyfunction.h"
-#include "ivobject.h"
-#include "ui/verectgraphicsitem.h"
+#include "ivfunctiontypegraphicsitem.h"
 
-#include <QScopedPointer>
-
-namespace ivm {
-class IVMyFunctionGraphicsItem;
-}
+class QSvgRenderer;
 
 namespace ive {
+class IVInterfaceGraphicsItem;
 
-class IVMyFunctionGraphicsItem : public shared::ui::VERectGraphicsItem
+class IVMyFunctionGraphicsItem : public IVFunctionTypeGraphicsItem
 {
     Q_OBJECT
-
 public:
-    explicit IVMyFunctionGraphicsItem(ivm::IVMyFunction *comment, QGraphicsItem *parent = nullptr);
+    explicit IVMyFunctionGraphicsItem(ivm::IVMyFunction *entity, QGraphicsItem *parent = nullptr);
     enum
     {
         Type = UserType + static_cast<int>(ivm::IVObject::Type::MyFunction)
     };
-    int type() const override { return Type; }
 
     void init() override;
 
-    void setText(const QString &text);
-    QString text() const;
-
     ivm::IVMyFunction *entity() const override;
-    QSizeF minimalSize() const override;
-    void updateFromEntity() override;
 
-    int itemLevel(bool isSelected) const override;
+    int type() const override { return Type; }
 
-protected Q_SLOTS:
-    virtual void applyColorScheme() override;
+    QPainterPath shape() const override;
+
+    QString prepareTooltip() const override;
 
 protected:
-    void rebuildLayout() override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    void onManualResizeProgress(shared::ui::GripPoint *grip, const QPointF &from, const QPointF &to) override;
+    void onManualResizeFinish(
+            shared::ui::GripPoint *grip, const QPointF &pressedAt, const QPointF &releasedAt) override;
+    void onManualMoveProgress(shared::ui::GripPoint *grip, const QPointF &from, const QPointF &to) override;
+    void onManualMoveFinish(shared::ui::GripPoint *grip, const QPointF &pressedAt, const QPointF &releasedAt) override;
+
+    void prepareTextRect(QRectF &textRect, const QRectF &targetTextRect) const override;
+
     virtual shared::ColorManager::HandledColors handledColorType() const override;
 
+protected Q_SLOTS:
+    void applyColorScheme() override;
+
 private:
-    QString m_text;
+    void layoutConnectionsOnMove(IVConnectionGraphicsItem::CollisionsPolicy collisionsPolicy);
+    void layoutConnectionsOnResize(IVConnectionGraphicsItem::CollisionsPolicy collisionsPolicy);
+
+    void drawNestedView(QPainter *painter);
+
+private:
+    static QPointer<QSvgRenderer> m_svgRenderer;
 };
 
 }

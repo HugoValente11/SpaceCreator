@@ -30,6 +30,7 @@ namespace ivm {
 class IVComment;
 class IVConnection;
 class IVFunction;
+class IVMyFunction;
 class IVFunctionType;
 class PropertyTemplateConfig;
 
@@ -57,11 +58,14 @@ public:
             const QString &name, Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive) const;
     IVFunction *getFunction(const shared::Id &id) const;
     IVFunction *getFunction(const QString &name, Qt::CaseSensitivity caseSensitivity) const;
+    IVMyFunction *getMyFunction(const shared::Id &id) const;
+    IVMyFunction *getMyFunction(const QString &name, Qt::CaseSensitivity caseSensitivity) const;
     IVFunctionType *getFunctionType(const QString &name, Qt::CaseSensitivity caseSensitivity) const;
     IVFunctionType *getFunctionType(const shared::Id &id) const;
     IVFunctionType *getSharedFunctionType(const QString &name, Qt::CaseSensitivity caseSensitivity) const;
     IVFunctionType *getSharedFunctionType(const shared::Id &id) const;
     QHash<QString, IVFunctionType *> getAvailableFunctionTypes(const IVFunction *fnObj) const;
+    QHash<QString, IVFunctionType *> getAvailableFunctionTypes(const IVMyFunction *fnObj) const;
     IVInterface *getInterface(const shared::Id &id) const;
     IVInterfaceRequired *getRequiredInterface(const shared::Id &id) const;
     IVInterfaceProvided *getProvidedInterface(const shared::Id &id) const;

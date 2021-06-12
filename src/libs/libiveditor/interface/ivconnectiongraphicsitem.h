@@ -27,6 +27,7 @@ namespace ive {
 
 class IVInterfaceGraphicsItem;
 class IVFunctionGraphicsItem;
+class IVMyFunctionGraphicsItem;
 
 class IVConnectionGraphicsItem : public shared::ui::VEInteractiveObject
 {
@@ -77,6 +78,9 @@ public:
 
     IVFunctionGraphicsItem *sourceItem() const;
     IVFunctionGraphicsItem *targetItem() const;
+
+    IVMyFunctionGraphicsItem *mySourceItem() const;
+    IVMyFunctionGraphicsItem *myTargetItem() const;
 
     QList<QPair<shared::VEObject *, QVector<QPointF>>> prepareChangeCoordinatesCommandParams() const override;
 

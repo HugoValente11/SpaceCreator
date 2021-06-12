@@ -21,65 +21,105 @@
 #include "colors/colormanager.h"
 #include "graphicsitemhelpers.h"
 #include "graphicsviewutils.h"
+#include "ivcommentgraphicsitem.h"
+#include "ivconnection.h"
+#include "ivconnectiongraphicsitem.h"
 #include "ivmyfunction.h"
-#include "ivfunctiongraphicsitem.h"
-#include "ui/textitem.h"
+#include "ivfunctionnamegraphicsitem.h"
+#include "ivinterfacegraphicsitem.h"
+#include "ivmodel.h"
 
 #include <QApplication>
 #include <QGraphicsScene>
+#include <QGraphicsSvgItem>
+#include <QGraphicsView>
 #include <QPainter>
-#include <QTextLayout>
-#include <QTextLine>
+#include <QSvgRenderer>
+#include <QTimer>
 #include <QtDebug>
+#include <cmath>
 
-static const qreal kBorderWidth = 2;
-static const qreal kMargins = 14 + kBorderWidth;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+#include <QScopeGuard>
+#else
+template<typename F>
+class QScopeGuard;
+template<typename F>
+QScopeGuard<F> qScopeGuard(F f);
+
+template<typename F>
+class QScopeGuard
+{
+public:
+    QScopeGuard(QScopeGuard &&other) Q_DECL_NOEXCEPT : m_func(std::move(other.m_func)), m_invoke(other.m_invoke)
+    {
+        other.dismiss();
+    }
+
+    ~QScopeGuard()
+    {
+        if (m_invoke)
+            m_func();
+    }
+
+    void dismiss() Q_DECL_NOEXCEPT { m_invoke = false; }
+
+private:
+    explicit QScopeGuard(F f) Q_DECL_NOEXCEPT : m_func(std::move(f)) { }
+
+    Q_DISABLE_COPY(QScopeGuard)
+
+    F m_func;
+    bool m_invoke = true;
+    friend QScopeGuard qScopeGuard<F>(F);
+};
+
+template<typename F>
+QScopeGuard<F> qScopeGuard(F f)
+{
+    return QScopeGuard<F>(std::move(f));
+}
+#endif
+
+static const qreal kBorderWidth = 2.0;
+static const qreal kRadius = 10.0;
+static const qreal kOffset = kBorderWidth / 2.0;
 
 namespace ive {
 
-IVMyFunctionGraphicsItem::IVMyFunctionGraphicsItem(ivm::IVMyFunction *comment, QGraphicsItem *parent)
-    : shared::ui::VERectGraphicsItem(comment, parent)
+QPointer<QSvgRenderer> IVMyFunctionGraphicsItem::m_svgRenderer = {};
+
+IVMyFunctionGraphicsItem::IVMyFunctionGraphicsItem(ivm::IVMyFunction *entity, QGraphicsItem *parent)
+    : IVFunctionTypeGraphicsItem(entity, parent)
 {
-    setFlag(QGraphicsItem::ItemIsSelectable);
-    setFont(qApp->font());
-    setZValue(ZOrder.Comment);
+    m_textItem->setVisible(!isRootItem());
+    m_textItem->setTextAlignment(Qt::AlignCenter);
+
+    if (!m_svgRenderer) // TODO: change icon
+        m_svgRenderer = new QSvgRenderer(QLatin1String(":/tab_interface/toolbar/icns/change_root.svg"));
 }
 
 void IVMyFunctionGraphicsItem::init()
 {
-    shared::ui::VERectGraphicsItem::init();
-    connect(entity(), &ivm::IVObject::titleChanged, this, &shared::ui::VEInteractiveObject::updateGraphicsItem);
-}
-
-void IVMyFunctionGraphicsItem::updateFromEntity()
-{
-    shared::ui::VERectGraphicsItem::updateFromEntity();
-    setText(entity()->titleUI());
-}
-
-int IVMyFunctionGraphicsItem::itemLevel(bool isSelected) const
-{
-    return gi::itemLevel(entity(), isSelected);
-}
-
-void IVMyFunctionGraphicsItem::setText(const QString &text)
-{
-    if (m_text == text)
-        return;
-
-    m_text = text;
-
-    instantLayoutUpdate();
-}
-
-QString IVMyFunctionGraphicsItem::text() const
-{
-    return m_text;
+    IVFunctionTypeGraphicsItem::init();
+    connect(entity(), &ivm::IVMyFunction::childAdded, this, [this]() { update(); });
+    connect(entity(), &ivm::IVMyFunction::childRemoved, this, [this]() { update(); });
 }
 
 ivm::IVMyFunction *IVMyFunctionGraphicsItem::entity() const
 {
     return qobject_cast<ivm::IVMyFunction *>(m_dataObject);
+}
+
+QPainterPath IVMyFunctionGraphicsItem::shape() const
+{
+    QPainterPath pp;
+    const QRectF br = boundingRect().adjusted(kOffset, kOffset, -kOffset, -kOffset);
+    if (isRootItem())
+        pp.addRect(br);
+    else
+        pp.addRoundedRect(br, kRadius, kRadius);
+    return pp;
 }
 
 void IVMyFunctionGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -88,87 +128,371 @@ void IVMyFunctionGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     Q_UNUSED(widget)
 
     painter->save();
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(pen());
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    painter->setPen(isSelected() ? selectedPen() : m_pen);
     painter->setBrush(brush());
-    painter->setFont(font());
 
-    const QRectF br = boundingRect();
-    auto preparePolygon = [](const QRectF &rect) {
-        return QVector<QPointF> { rect.topRight() - QPointF(kMargins, 0), rect.topLeft(), rect.bottomLeft(),
-            rect.bottomRight(), rect.topRight() + QPointF(0, kMargins), rect.topRight() - QPointF(kMargins, 0) };
-    };
-    painter->drawPolygon(preparePolygon(br));
+    const QRectF br = boundingRect().adjusted(kOffset, kOffset, -kOffset, -kOffset);
+    if (isRootItem())
+        painter->drawRect(br);
+    else
+        painter->drawRoundedRect(br, kRadius, kRadius);
 
-    auto preparePolyline = [](const QRectF &rect) {
-        return QVector<QPointF> { rect.topRight() + QPointF(0, kMargins),
-            rect.topRight() - QPointF(kMargins, -kMargins), rect.topRight() - QPointF(kMargins, 0) };
-    };
-    painter->drawPolyline(preparePolyline(br));
+    if (!isRootItem() && entity() && entity()->hasNestedChildren()) {
+        QRectF iconRect { QPointF(0, 0), m_svgRenderer->defaultSize() };
+        iconRect.moveTopRight(br.adjusted(kRadius, kRadius, -kRadius, -kRadius).topRight());
+        m_svgRenderer->render(painter, iconRect);
 
-    qreal y = kMargins;
-    const qreal lineWidth = boundingRect().width() - 2 * kMargins;
-    const qreal maxY = boundingRect().height() - kMargins;
-    const QFontMetricsF fm(font());
-    bool complete = false;
-    for (auto line : m_text.split(QLatin1Char('\n'))) {
-        QTextLayout textLayout(line);
-        textLayout.setFont(font());
-        textLayout.beginLayout();
-        while (true) {
-            QTextLine textLine = textLayout.createLine();
-            if (!textLine.isValid()) {
-                break;
-            }
-
-            textLine.setLineWidth(lineWidth);
-            if (maxY < y + textLine.height()) {
-                const QString lastLine = line.mid(textLine.textStart());
-                const QString elidedLastLine = fm.elidedText(lastLine, Qt::ElideRight, lineWidth);
-                painter->drawText(QPointF(kMargins, y + fm.ascent()), elidedLastLine);
-                complete = true;
-                break;
-            }
-
-            textLine.draw(painter, QPointF(kMargins, y));
-            y += textLine.height();
-        }
-        textLayout.endLayout();
-        if (complete)
-            break;
+        drawNestedView(painter);
     }
 
     painter->restore();
-    shared::ui::VERectGraphicsItem::paint(painter, option, widget);
 }
 
-void IVMyFunctionGraphicsItem::rebuildLayout()
+void IVMyFunctionGraphicsItem::onManualResizeProgress(
+        shared::ui::GripPoint *grip, const QPointF &pressedAt, const QPointF &releasedAt)
 {
-    shared::ui::VERectGraphicsItem::rebuildLayout();
-    setVisible(entity() && (gi::nestingLevel(entity()) >= gi::kNestingVisibilityLevel || entity()->isRootObject())
-            && entity()->isVisible());
-    update();
+    if (pressedAt == releasedAt)
+        return;
+
+    const QRectF rect = transformedRect(grip, pressedAt, releasedAt);
+    if (shared::graphicsviewutils::isBounded(this, rect)) {
+        IVFunctionTypeGraphicsItem::onManualResizeProgress(grip, pressedAt, releasedAt);
+        layoutConnectionsOnResize(IVConnectionGraphicsItem::CollisionsPolicy::Ignore);
+    }
 }
 
-QSizeF IVMyFunctionGraphicsItem::minimalSize() const
+void IVMyFunctionGraphicsItem::onManualMoveProgress(
+        shared::ui::GripPoint *grip, const QPointF &pressedAt, const QPointF &releasedAt)
 {
-    return shared::graphicsviewutils::kDefaultGraphicsItemSize;
+    if (isRootItem())
+        return;
+
+    if (pressedAt == releasedAt)
+        return;
+
+    const QRectF rect = transformedRect(grip, pressedAt, releasedAt);
+    if (shared::graphicsviewutils::isBounded(this, rect)) {
+        IVFunctionTypeGraphicsItem::onManualMoveProgress(grip, pressedAt, releasedAt);
+        layoutConnectionsOnMove(IVConnectionGraphicsItem::CollisionsPolicy::Ignore);
+    }
+}
+
+void IVMyFunctionGraphicsItem::onManualResizeFinish(
+        shared::ui::GripPoint *grip, const QPointF &pressedAt, const QPointF &releasedAt)
+{
+    Q_UNUSED(grip)
+
+    if (pressedAt == releasedAt)
+        return;
+
+    if (shared::graphicsviewutils::isBounded(this, sceneBoundingRect())
+            && !shared::graphicsviewutils::isCollided(this, sceneBoundingRect())) {
+        layoutInterfaces();
+        layoutConnectionsOnResize(IVConnectionGraphicsItem::CollisionsPolicy::PartialRebuild);
+        updateEntity();
+    } else { // Fallback to previous geometry in case colliding with items at the same level
+        updateFromEntity();
+        layoutConnectionsOnResize(IVConnectionGraphicsItem::CollisionsPolicy::Ignore);
+    }
+}
+
+void IVMyFunctionGraphicsItem::onManualMoveFinish(
+        shared::ui::GripPoint *grip, const QPointF &pressedAt, const QPointF &releasedAt)
+{
+    Q_UNUSED(grip)
+
+    if (isRootItem())
+        return;
+
+    if (pressedAt == releasedAt)
+        return;
+
+    if (shared::graphicsviewutils::isBounded(this, sceneBoundingRect())
+            && !shared::graphicsviewutils::isCollided(this, sceneBoundingRect())) {
+        layoutConnectionsOnMove(IVConnectionGraphicsItem::CollisionsPolicy::PartialRebuild);
+        updateEntity();
+    } else { // Fallback to previous geometry in case colliding with items at the same level
+        updateFromEntity();
+        layoutConnectionsOnMove(IVConnectionGraphicsItem::CollisionsPolicy::Ignore);
+    }
+}
+
+static inline void drawItems(
+        const QRectF &boundingRect, const QList<QRectF> &existingRects, int count, const qreal sf, QPainter *painter)
+{
+    QRectF childRect { QPointF(), shared::graphicsviewutils::kDefaultGraphicsItemSize * sf };
+    const qreal yOffset = sf
+            * (shared::graphicsviewutils::kContentMargins.top() + shared::graphicsviewutils::kContentMargins.bottom());
+    const qreal xOffset = sf
+            * (shared::graphicsviewutils::kContentMargins.left() + shared::graphicsviewutils::kContentMargins.right());
+    const int column = boundingRect.width() / (childRect.width() + xOffset);
+    const int row = boundingRect.height() / (childRect.height() + yOffset);
+    if (!count || !column || !row) {
+        return;
+    }
+    for (int idx = 0; idx < count && idx < column * row;) {
+        const int currentRow = idx / column;
+        const int currentColumn = idx % column;
+        childRect.moveTopLeft(boundingRect.topLeft()
+                + QPointF((childRect.width() + xOffset) * currentColumn, (childRect.height() + yOffset) * currentRow));
+        auto it = std::find_if(existingRects.cbegin(), existingRects.cend(),
+                [childRect](const QRectF &r) { return r.intersects(childRect); });
+        if (it == existingRects.cend()) {
+            painter->drawRect(childRect);
+            ++idx;
+        }
+    }
+};
+
+void IVMyFunctionGraphicsItem::drawNestedView(QPainter *painter)
+{
+    if (!entity()->hasNestedChildren()) {
+        return;
+    }
+
+    painter->save();
+    auto cleanup = qScopeGuard([painter] { painter->restore(); });
+
+    const QRectF br = boundingRect();
+
+    const shared::ColorHandler ch =
+            shared::ColorManager::instance()->colorsForItem(shared::ColorManager::FunctionScale);
+    painter->setBrush(ch.brush());
+    painter->setPen(QPen(ch.penColor(), ch.penWidth()));
+
+    QRectF nestedRect;
+    const QVector<ivm::IVObject *> childEntities = entity()->children();
+    static const ivm::meta::Props::Token token = ivm::meta::Props::Token::InnerCoordinates;
+    QList<shared::Id> itemsCountWithoutGeometry;
+    QHash<shared::Id, QRectF> existingRects;
+    QHash<shared::Id, QPolygonF> existingPolygons;
+    struct ConnectionData {
+        QPointF outerMappedScenePos;
+        QPointF innerScenePos;
+        shared::Id innerFunctionId;
+    };
+    QList<ConnectionData> parentConnections;
+    for (const ivm::IVObject *child : qAsConst(childEntities)) {
+        const QString strCoordinates = child->entityAttributeValue<QString>(ivm::meta::Props::token(token));
+        if (child->type() == ivm::IVObject::Type::MyFunction || child->type() == ivm::IVObject::Type::FunctionType
+                || child->type() == ivm::IVObject::Type::Comment) {
+            const QRectF itemSceneRect =
+                    shared::graphicsviewutils::rect(ivm::IVObject::coordinatesFromString(strCoordinates));
+            if (itemSceneRect.isValid()) {
+                nestedRect |= itemSceneRect;
+                existingRects.insert(child->id(), itemSceneRect);
+            } else {
+                itemsCountWithoutGeometry.append(child->id());
+            }
+        } else if (auto connection = qobject_cast<const ivm::IVConnection *>(child)) {
+            if (connection->source()->id() != entity()->id() && connection->target()->id() != entity()->id()) {
+                const QPolygonF itemScenePoints =
+                        shared::graphicsviewutils::polygon(ivm::IVObject::coordinatesFromString(strCoordinates));
+                if (!itemScenePoints.isEmpty()) {
+                    existingPolygons.insert(child->id(), itemScenePoints);
+                } else {
+                    /// TODO:
+                }
+            } else {
+                ivm::IVObject *outerIface = connection->source()->id() == entity()->id() ? connection->sourceInterface()
+                        : connection->target()->id() == entity()->id()                   ? connection->targetInterface()
+                                                                                         : nullptr;
+
+                ivm::IVObject *innerIface = connection->source()->id() == entity()->id() ? connection->targetInterface()
+                        : connection->target()->id() == entity()->id()                   ? connection->sourceInterface()
+                                                                                         : nullptr;
+
+                if (!outerIface || !innerIface) {
+                    continue;
+                }
+
+                const auto items = childItems();
+                auto it = std::find_if(
+                        items.cbegin(), items.cend(), [ifaceId = outerIface->id()](const QGraphicsItem *item) {
+                            if (item->type() != IVInterfaceGraphicsItem::Type) {
+                                return false;
+                            } else if (auto iface = qgraphicsitem_cast<const IVInterfaceGraphicsItem *>(item)) {
+                                return iface->entity()->id() == ifaceId;
+                            } else {
+                                return false;
+                            }
+                        });
+                if (it == items.cend()) {
+                    continue;
+                }
+
+                QPointF innerIfacePos;
+                if (innerIface->hasEntityAttribute(ivm::meta::Props::token(token))) {
+                    const QString ifaceStrCoordinates =
+                            innerIface->entityAttributeValue<QString>(ivm::meta::Props::token(token));
+                    innerIfacePos =
+                            shared::graphicsviewutils::pos(ivm::IVObject::coordinatesFromString(ifaceStrCoordinates));
+                }
+                ConnectionData cd { (*it)->scenePos(), innerIfacePos, innerIface->parentObject()->id() };
+                /// TODO: generate path between outer and inner ifaces
+                /// templorary using straight line to present it
+                parentConnections << cd;
+            }
+        }
+    }
+    while (!itemsCountWithoutGeometry.isEmpty()) {
+        const shared::Id id = itemsCountWithoutGeometry.takeLast();
+        QRectF itemRect { QPointF(), shared::graphicsviewutils::kDefaultGraphicsItemSize };
+        shared::graphicsviewutils::findGeometryForRect(itemRect, nestedRect, existingRects.values());
+        existingRects.insert(id, itemRect);
+    }
+
+    if (!nestedRect.isValid()) {
+        auto view = scene()->views().value(0);
+        if (!view)
+            return;
+
+        const int count = std::count_if(childEntities.cbegin(), childEntities.cend(), [](const ivm::IVObject *child) {
+            return child->type() == ivm::IVObject::Type::Function || child->type() == ivm::IVObject::Type::FunctionType
+                    || child->type() == ivm::IVObject::Type::Comment || child->type() == ivm::IVObject::Type::MyFunction ;
+        });
+
+        const QRect viewportGeometry =
+                view->viewport()->geometry().marginsRemoved(shared::graphicsviewutils::kContentMargins.toMargins());
+        const QRectF mappedViewportGeometry =
+                QRectF(view->mapToScene(viewportGeometry.topLeft()), view->mapToScene(viewportGeometry.bottomRight()));
+
+        const qreal sf =
+                qMin(br.width() / mappedViewportGeometry.width(), br.height() / mappedViewportGeometry.height());
+        drawItems(br, {}, count, sf, painter);
+    } else {
+        const QRectF contentRect { nestedRect.marginsAdded(shared::graphicsviewutils::kRootMargins) };
+        const qreal sf = qMin(br.width() / contentRect.width(), br.height() / contentRect.height());
+        const QTransform transform = QTransform::fromScale(sf, sf).translate(-contentRect.x(), -contentRect.y());
+
+        QList<QRectF> mappedRects;
+        QFont painterFont = painter->font();
+        painterFont.setItalic(true);
+        painterFont.setPointSize(painterFont.pointSize() - 1);
+        const QFontMetricsF fm(painterFont);
+        for (auto it = existingRects.cbegin(); it != existingRects.cend(); ++it) {
+            const QRectF r = it.value();
+            const QRectF mappedRect = transform.mapRect(r);
+            mappedRects << mappedRect;
+            painter->drawRect(mappedRect);
+
+            const QString text = entity()->model()->getObject(it.key())->titleUI();
+            const QRectF textRect = fm.boundingRect(
+                    mappedRect.adjusted(4, 4, -4, -4), Qt::AlignTop | Qt::AlignLeft | Qt::TextDontClip, text);
+            if (mappedRect.contains(textRect)) {
+                painter->setFont(painterFont);
+                painter->drawText(textRect, Qt::AlignTop | Qt::AlignLeft, text);
+            }
+        }
+        for (const QPolygonF &p : qAsConst(existingPolygons)) {
+            painter->drawPolyline(transform.map(p));
+        }
+        for (const ConnectionData &connectionData : qAsConst(parentConnections)) {
+            const QRectF innerRect = transform.mapRect(existingRects.value(connectionData.innerFunctionId));
+            const QRectF outerRect = mapRectFromScene(sceneBoundingRect());
+            const QPointF outerPos = mapFromScene(connectionData.outerMappedScenePos);
+            QPointF innerPos;
+            if (connectionData.innerScenePos.isNull()) {
+                const QPointF ratio { (outerRect.right() - outerPos.x()) / outerRect.width(),
+                    (outerRect.bottom() - outerPos.y()) / outerRect.height() };
+                const qreal x = innerRect.left() + innerRect.width() * ratio.x();
+                const qreal y = innerRect.top() + innerRect.height() * ratio.y();
+                const Qt::Alignment side = shared::graphicsviewutils::getNearestSide(outerRect, outerPos);
+                innerPos = shared::graphicsviewutils::getSidePosition(innerRect, QPointF(x, y), side);
+            } else {
+                innerPos = transform.map(connectionData.innerScenePos);
+            }
+            painter->drawPolyline(shared::graphicsviewutils::createConnectionPath(
+                    mappedRects, outerPos, outerRect, innerPos, innerRect));
+        }
+    }
+}
+
+void IVMyFunctionGraphicsItem::layoutConnectionsOnResize(IVConnectionGraphicsItem::CollisionsPolicy collisionsPolicy)
+{
+    /// Changing inner and outer connections bound to current function item
+    for (const auto item : childItems()) {
+        if (auto iface = qgraphicsitem_cast<IVInterfaceGraphicsItem *>(item)) {
+            IVConnectionGraphicsItem::layoutInterfaceConnections(
+                    iface, IVConnectionGraphicsItem::LayoutPolicy::Scaling, collisionsPolicy, true);
+        } else if (auto connection = qgraphicsitem_cast<IVConnectionGraphicsItem *>(item)) {
+            if (connection->mySourceItem() != this && connection->myTargetItem() != this)
+                connection->layout();
+        }
+    }
+}
+
+void IVMyFunctionGraphicsItem::layoutConnectionsOnMove(IVConnectionGraphicsItem::CollisionsPolicy collisionsPolicy)
+{
+    /// Changing outer connections only cause inner stay unchanged as children of current item
+    for (const auto item : childItems()) {
+        if (auto iface = qgraphicsitem_cast<IVInterfaceGraphicsItem *>(item)) {
+            IVConnectionGraphicsItem::layoutInterfaceConnections(
+                    iface, IVConnectionGraphicsItem::LayoutPolicy::Scaling, collisionsPolicy, false);
+        }
+    }
+}
+
+void IVMyFunctionGraphicsItem::prepareTextRect(QRectF &textRect, const QRectF &targetTextRect) const
+{
+    textRect.moveCenter(targetTextRect.center());
 }
 
 shared::ColorManager::HandledColors IVMyFunctionGraphicsItem::handledColorType() const
 {
-    return shared::ColorManager::HandledColors::MyFunction;
+    if (isRootItem())
+        return shared::ColorManager::HandledColors::FunctionRoot;
+
+    const QRectF nestedRect = nestedItemsSceneBoundingRect();
+    if (nestedRect.isValid()
+            && !sceneBoundingRect().contains(nestedRect.marginsAdded(shared::graphicsviewutils::kContentMargins)))
+        return shared::ColorManager::HandledColors::FunctionPartial;
+
+    return shared::ColorManager::HandledColors::FunctionRegular;
 }
 
 void IVMyFunctionGraphicsItem::applyColorScheme()
 {
     const shared::ColorHandler &h = colorHandler();
-    QPen pen = h.pen();
-    pen.setCapStyle(Qt::FlatCap);
-    pen.setStyle(Qt::SolidLine);
-    setPen(pen);
-    setBrush(h.brush());
+    QPen p = h.pen();
+    QBrush b = h.brush();
+
+    if (auto parentFunction = qgraphicsitem_cast<IVMyFunctionGraphicsItem *>(parentItem())) {
+        if (!parentFunction->entity()->hasEntityAttribute(QLatin1String("color"))
+                && !entity()->hasEntityAttribute(QLatin1String("color"))
+                && parentFunction->handledColorType()
+                        == shared::ColorManager::HandledColors::FunctionRegular) { // [Hm...]
+            b.setColor(parentFunction->brush().color().darker(125));
+            p.setColor(parentFunction->pen().color().darker(125));
+        }
+    }
+
+    if (pen() == p && brush() == b)
+        return;
+
+    setPen(p);
+    setBrush(b);
+
+    // During undo, a child can be updated before its parent,
+    // so on the step marked as [Hm...] above, the parent is still of type FunctionPartial and not the
+    // FunctionRegular. Thus, the child gets the "default" colour, instead of "parent.darker". For now, I can't see
+    // a better way but just to update children colours manually:
+    for (auto child : childItems())
+        if (child->type() == IVMyFunctionGraphicsItem::Type)
+            if (auto nestedFunction = qobject_cast<IVMyFunctionGraphicsItem *>(child->toGraphicsObject()))
+                nestedFunction->applyColorScheme();
+
     update();
 }
 
+QString IVMyFunctionGraphicsItem::prepareTooltip() const
+{
+    const QString title = uniteNames<ivm::IVFunctionType *>({ entity() }, QString());
+    const QString prototype = uniteNames<const ivm::IVFunctionType *>({ entity()->instanceOf() }, tr("Instance of: "));
+    const QString ris = uniteNames<ivm::IVInterface *>(entity()->ris(), tr("RI: "));
+    const QString pis = uniteNames<ivm::IVInterface *>(entity()->pis(), tr("PI: "));
+
+    return joinNonEmpty({ title, prototype, ris, pis }, QStringLiteral("<br>"));
+}
 }
