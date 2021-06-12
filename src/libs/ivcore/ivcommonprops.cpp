@@ -55,6 +55,7 @@ const QHash<QString, Props::Token> Props::TokensByName = {
     { "is_visible", Token::is_visible },
     { "Number", Token::Number },
     { "Type", Token::Type },
+    { "component", Token::component},
 
 
     // TASTE props:

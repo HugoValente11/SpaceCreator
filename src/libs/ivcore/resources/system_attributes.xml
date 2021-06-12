@@ -100,4 +100,15 @@
             <MyFunction/>
         </Scopes>
     </Attr>
+    <Attr label="Type of component" name="component">
+        <Type>
+            <Enumeration defaultValue="system">
+                <Entry value="system"/>
+                <Entry value="abstract"/>
+            </Enumeration>
+        </Type>
+        <Scopes>
+            <Function/>
+        </Scopes>
+    </Attr>
 </Attrs>

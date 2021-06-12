@@ -63,6 +63,7 @@ public:
         is_visible,
         Number,
         Type,
+        component,
 
         // KNOWN TASTE props:
         coordinates,
