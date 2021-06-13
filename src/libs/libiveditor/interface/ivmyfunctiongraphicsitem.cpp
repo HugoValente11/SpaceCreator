@@ -90,7 +90,7 @@ namespace ive {
 QPointer<QSvgRenderer> IVMyFunctionGraphicsItem::m_svgRenderer = {};
 
 IVMyFunctionGraphicsItem::IVMyFunctionGraphicsItem(ivm::IVMyFunction *entity, QGraphicsItem *parent)
-    : IVFunctionTypeGraphicsItem(entity, parent)
+    : IVFunctionGraphicsItem(entity, parent)
 {
     m_textItem->setVisible(!isRootItem());
     m_textItem->setTextAlignment(Qt::AlignCenter);

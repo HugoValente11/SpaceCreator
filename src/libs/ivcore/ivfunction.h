@@ -31,7 +31,7 @@ class IVFunction : public IVFunctionType
     Q_OBJECT
 public:
     explicit IVFunction(
-            const QString &title = QString(), QObject *parent = nullptr, const shared::Id &id = shared::InvalidId);
+            const QString &title = QString(), QObject *parent = nullptr, const shared::Id &id = shared::InvalidId, const IVObject::Type type = IVObject::Type::Function);
     ~IVFunction() override;
 
     bool postInit(QString *warning = nullptr) override;

@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "ivfunctiontype.h"
+#include "ivfunction.h"
 
 #include <QHash>
 #include <QObject>
@@ -26,7 +26,7 @@
 namespace ivm {
 
 struct IVMyFunctionPrivate;
-class IVMyFunction : public IVFunctionType
+class IVMyFunction : public IVFunction
 {
     Q_OBJECT
 public:

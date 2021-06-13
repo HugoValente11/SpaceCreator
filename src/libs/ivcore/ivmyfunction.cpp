@@ -33,7 +33,7 @@ struct IVMyFunctionPrivate {
 };
 
 IVMyFunction::IVMyFunction(const QString &title, QObject *parent, const shared::Id &id)
-    : IVFunctionType(IVObject::Type::MyFunction, title, parent, id)
+    : IVFunction(title, parent, id, IVObject::Type::MyFunction)
     , d(new IVMyFunctionPrivate)
 {
 }

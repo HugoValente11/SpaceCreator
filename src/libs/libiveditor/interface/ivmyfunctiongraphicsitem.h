@@ -19,14 +19,14 @@
 
 #include "ivconnectiongraphicsitem.h"
 #include "ivmyfunction.h"
-#include "ivfunctiontypegraphicsitem.h"
+#include "ivfunctiongraphicsitem.h"
 
 class QSvgRenderer;
 
 namespace ive {
 class IVInterfaceGraphicsItem;
 
-class IVMyFunctionGraphicsItem : public IVFunctionTypeGraphicsItem
+class IVMyFunctionGraphicsItem : public IVFunctionGraphicsItem
 {
     Q_OBJECT
 public:

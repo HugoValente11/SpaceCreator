@@ -52,13 +52,13 @@ QVariant ExportableIVObject::createFrom(const ivm::IVObject *ivObject)
     switch (ivObject->type()) {
     case ivm::IVObject::Type::InterfaceGroup:
         return {};
+    case ivm::IVObject::Type::MyFunction:
     case ivm::IVObject::Type::Function:
     case ivm::IVObject::Type::FunctionType:
         return QVariant::fromValue(ExportableIVFunction(static_cast<const ivm::IVFunctionType *>(ivObject)));
     case ivm::IVObject::Type::RequiredInterface:
     case ivm::IVObject::Type::ProvidedInterface:
         return QVariant::fromValue(ExportableIVInterface(static_cast<const ivm::IVInterface *>(ivObject)));
-    case ivm::IVObject::Type::MyFunction:
     case ivm::IVObject::Type::Comment:
         return QVariant::fromValue(ExportableIVObject(ivObject));
     case ivm::IVObject::Type::Connection:

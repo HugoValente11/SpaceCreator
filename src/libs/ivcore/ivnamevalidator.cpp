@@ -329,6 +329,8 @@ QString IVNameValidator::nextName(const IVObject *object) const
 
     const IVObject::Type t = object->type();
     switch (t) {
+    case IVObject::Type::MyFunction:
+        return nameMyFunction(object);
     case IVObject::Type::Function:
         return nameFunction(object);
     case IVObject::Type::FunctionType:
@@ -339,8 +341,6 @@ QString IVNameValidator::nextName(const IVObject *object) const
         return nameProvidedInterface(object);
     case IVObject::Type::Comment:
         return nameComment(object);
-    case IVObject::Type::MyFunction:
-        return nameMyFunction(object);
     case IVObject::Type::ConnectionGroup:
     case IVObject::Type::Connection:
         return nameConnection(object);

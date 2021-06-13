@@ -47,7 +47,7 @@ class IVInterfaceGraphicsItem;
 class IVFunctionGraphicsItem;
 class IVFunctionTypeGraphicsItem;
 class IVConnectionGraphicsItem;
-class IVMyFunctionGraphicsIitem;
+class IVMyFunctionGraphicsItem;
 
 /*!
    \class IVItemModel is the model represents the scene graph of the currently selected/visible

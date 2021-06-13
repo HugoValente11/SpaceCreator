@@ -30,6 +30,7 @@
 #include "ivcomment.h"
 #include "ivconnection.h"
 #include "ivfunction.h"
+#include "ivmyfunction.h"
 #include "ivfunctiontype.h"
 #include "ivinterface.h"
 #include "ivobject.h"
@@ -44,7 +45,7 @@ namespace gi {
 namespace utils = shared::graphicsviewutils;
 
 static const QList<int> kRectTypes { IVCommentGraphicsItem::Type, IVFunctionGraphicsItem::Type,
-    IVFunctionTypeGraphicsItem::Type };
+    IVFunctionTypeGraphicsItem::Type, IVMyFunctionGraphicsItem::Type };
 
 ivm::IVFunction *functionObject(QGraphicsItem *item)
 {
@@ -53,6 +54,9 @@ ivm::IVFunction *functionObject(QGraphicsItem *item)
 
     if (auto function = qobject_cast<IVFunctionGraphicsItem *>(item->toGraphicsObject()))
         return function->entity();
+
+    if (auto myFunction = qobject_cast<IVMyFunctionGraphicsItem *>(item->toGraphicsObject()))
+        return myFunction->entity();
 
     return nullptr;
 };
@@ -211,9 +215,9 @@ ivm::ValidationResult validateConnectionCreate(QGraphicsScene *scene, const QVec
     ivm::ValidationResult result;
     result.connectionPoints = points;
     result.functionAtStartPos = utils::nearestItem(
-            scene, utils::adjustFromPoint(startPos, utils::kFunctionTolerance), { ive::IVFunctionGraphicsItem::Type });
+            scene, utils::adjustFromPoint(startPos, utils::kFunctionTolerance), { ive::IVFunctionGraphicsItem::Type, ive::IVMyFunctionGraphicsItem::Type });
     result.functionAtEndPos = utils::nearestItem(
-            scene, utils::adjustFromPoint(endPos, utils::kFunctionTolerance), { ive::IVFunctionGraphicsItem::Type });
+            scene, utils::adjustFromPoint(endPos, utils::kFunctionTolerance), { ive::IVFunctionGraphicsItem::Type, ive::IVMyFunctionGraphicsItem::Type });
     result.startObject = ive::gi::functionObject(result.functionAtStartPos);
     result.endObject = ive::gi::functionObject(result.functionAtEndPos);
     result.isToOrFromNested =

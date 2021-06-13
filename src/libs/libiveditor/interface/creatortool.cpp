@@ -40,9 +40,11 @@
 #include "ivconnectiongraphicsitem.h"
 #include "ivconnectiongroup.h"
 #include "ivfunction.h"
+#include "ivmyfunction.h"
 #include "ivfunctiongraphicsitem.h"
 #include "ivfunctiontype.h"
 #include "ivfunctiontypegraphicsitem.h"
+#include "ivmyfunctiongraphicsitem.h"
 #include "ivinterface.h"
 #include "ivinterfacegraphicsitem.h"
 #include "ivitemmodel.h"
@@ -66,7 +68,7 @@
 #include <limits>
 
 static const qreal kContextMenuItemTolerance = 10.;
-static const QList<int> kFunctionTypes = { ive::IVFunctionGraphicsItem::Type, ive::IVFunctionTypeGraphicsItem::Type };
+static const QList<int> kFunctionTypes = { ive::IVFunctionGraphicsItem::Type, ive::IVFunctionTypeGraphicsItem::Type, ive::IVMyFunctionGraphicsItem::Type };
 static const qreal kPreviewItemPenWidth = 2.;
 
 namespace ive {
@@ -369,7 +371,7 @@ bool CreatorTool::onMousePress(QMouseEvent *e)
     }
 
     if (d->toolType == ToolType::DirectConnection && e->button() != Qt::RightButton) {
-        if (!shared::graphicsviewutils::nearestItem(scene, scenePos, QList<int> { IVFunctionGraphicsItem::Type })) {
+        if (!shared::graphicsviewutils::nearestItem(scene, scenePos, QList<int> { IVFunctionGraphicsItem::Type, IVMyFunctionGraphicsItem::Type })) {
             if (!shared::graphicsviewutils::nearestItem(scene, scenePos, shared::graphicsviewutils::kInterfaceTolerance,
                         { IVInterfaceGraphicsItem::Type }))
                 return false;
@@ -1011,7 +1013,7 @@ void CreatorTool::CreatorToolPrivate::handleConnection(const QVector<QPointF> &g
         ifaceCommons.name.clear();
     }
 
-    IVFunctionGraphicsItem *prevStartItem = qgraphicsitem_cast<ive::IVFunctionGraphicsItem *>(info.functionAtStartPos);
+    auto *prevStartItem = info.functionAtStartPos;
     QPointF firstExcludedPoint = *std::next(info.connectionPoints.constBegin());
     shared::Id prevStartIfaceId = info.startIfaceId;
     while (auto item = qgraphicsitem_cast<ive::IVFunctionGraphicsItem *>(prevStartItem->parentItem())) {
@@ -1061,7 +1063,7 @@ void CreatorTool::CreatorToolPrivate::handleConnection(const QVector<QPointF> &g
     }
 
     QPointF lastExcludedPoint = *std::next(info.connectionPoints.crbegin());
-    auto prevEndItem = qgraphicsitem_cast<ive::IVFunctionGraphicsItem *>(info.functionAtEndPos);
+    auto prevEndItem = info.functionAtEndPos;
     shared::Id prevEndIfaceId = info.endIfaceId;
     while (auto item = qgraphicsitem_cast<ive::IVFunctionGraphicsItem *>(prevEndItem->parentItem())) {
         if (item == info.functionAtStartPos && info.startIface) {
