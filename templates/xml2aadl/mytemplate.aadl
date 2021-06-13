@@ -17,68 +17,65 @@ comm                :   |_ Instance of comment
 -- generated code: do not edit
 ---------------------------------------------------
 
-
--- Write each component 
+-- Handle Functions ------------------------------
 {% for func in Functions %}
 	{% for attribute in func.attributes %}
-		{% if attribute.name == "component" %}
-			abstract {{ func.name }}
-				{% if func.interfaces != 0 %}
-					features
-						{% for iface in func.interfaces %}
-						{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
-						{% endfor %}
-				{% endif %}
-				
-			end {{func.name}};
+		{% if attribute.name == "component"%}
+			{% if attribute.value == "abstract" %}
+abstract {{ func.name }}
+			{% else %} 
+system {{func.name }} 
+			{%endif%}
 		{% endif %}
 	{% endfor %}
+				{% if func.interfaces != 0 %}
+	features
+						{% for iface in func.interfaces %}
+		{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
+						{% endfor %}
+				{%endif%}
+end {{func.name}};
 {% endfor %}
+-- End of Handling Functions ------------------------------
+
+-- Handle My Functions ------------------------------
+{% for func in MyFunctions %}
+abstract {{ func.name }}
+{% if func.interfaces != 0 %}
+	features
+	{% for iface in func.interfaces %}
+		{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
+	{% endfor %}
+{%endif%}
+end {{func.name}};
+{% endfor %}
+-- End of Handling My Functions ------------------------------
 
 
-
--- Write system connected
+-- Create system ------------------------
 system mySystem
-
 end mySystem;
 
-
-
 system implementation mySystem.impl
-	
 {% if Functions|length > 0 %}
-
-  subcomponents
+	subcomponents
   	{% for func in Functions %}
-
-    {{func.name}}: abstract {{func.name }};
+		{{func.name}}: {% for attribute in func.attributes %}{% if attribute.name == "component"%}{% if attribute.value == "abstract" %}abstract {{ func.name }}{% else %}system {{func.name }}{%endif%}{% endif %}{% endfor %};
 	{%endfor%}
 {% endif %}
 
-
-{% for conn in Connections %}
-{{conn.source }} -- Source 
-{{conn.target }}-- Target 
-{{conn.siName }}-- siName 
-{{conn.tiName }}-- tiName 
-{{conn.siIsRequired }} -- siIsRequired 
-{{conn.siIsProvided }} -- siIsProvided 
-{{conn.tiIsRequired }} -- tiIsRequired 
-{{conn.tiIsProvided }} -- tiIsProvided 
-{{ conn.attributes}} --attributes
-  {%endfor%}
-
 {% if Connections|length > 0 %}
-  connections
+	connections
   	{% for conn in Connections %}
   	  	{{conn.source}}_{{conn.target}}_{{conn.siName}}: port {% if conn.siIsRequired%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%} -> {% if conn.siIsProvided%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%}
-  	    {Timing => Immediate;};
-  	
+  	    {Timing => Immediate;}; 	
   	{% endfor %}
-
+	end connections
 
   {% endif %}
 end mySystem.impl;
+-- End of Creating system ------------------------
+
 
 
 

@@ -117,7 +117,6 @@ bool StringTemplate::parseFile(
     m_fileLoader->setTemplateDirs({ fileInfo.absolutePath() });
 
     //    m_engine->setPluginPaths({ GRANTLEE_LIB_DIR, QApplication::applicationDirPath() });
-//    m_engine->addPluginPath(QApplication::applicationDirPath());
     m_engine->addPluginPath(QApplication::applicationDirPath());
     QString myQApplicationPath = QApplication::applicationDirPath();
 
@@ -158,9 +157,6 @@ bool StringTemplate::parseFile(
     QTextStream textStream(&output);
     NoEscapeOutputStream outputStream(&textStream, m_doEscape);
 
-    qWarning() << "\n\n\nOutput :" << output << "\n\n\n";
-    qWarning() << "\n\n\nTextStream :" << &textStream << "\n\n\n";
-    qWarning() << "\n\n\nM_doEscape:" << m_doEscape << "\n\n\n";
 
     stringTemplate->render(&outputStream, &context);
     const QString result = output.trimmed();
