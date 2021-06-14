@@ -15,4 +15,5 @@ prop.value      :           |_ Value of property
 {% for prop in myfunc.properties %}
     <Property name="{{ prop.name }}" value="{{ prop.value }}"/>
 {% endfor %}
+aaa
 </MyFunction>

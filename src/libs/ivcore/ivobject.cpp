@@ -148,7 +148,9 @@ QStringList IVObject::path(const IVObject *obj)
     QStringList list { obj->title() };
     IVObject *parent = obj->parentObject();
     while (parent) {
-        if (parent->type() == ivm::IVObject::Type::Function || parent->type() == ivm::IVObject::Type::FunctionType || parent->type() == ivm::IVObject::Type::MyFunction) {
+//        if (parent->type() == ivm::IVObject::Type::Function || parent->type() == ivm::IVObject::Type::FunctionType || parent->type() == ivm::IVObject::Type::MyFunction) {
+            if (parent->type() == ivm::IVObject::Type::Function || parent->type() == ivm::IVObject::Type::FunctionType) {
+
             list.prepend(parent->title());
         }
         parent = parent->parentObject();

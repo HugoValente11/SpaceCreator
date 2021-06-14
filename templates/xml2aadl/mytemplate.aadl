@@ -62,8 +62,12 @@ system implementation mySystem.impl
   	{% for func in Functions %}
 		{{func.name}}: {% for attribute in func.attributes %}{% if attribute.name == "component"%}{% if attribute.value == "abstract" %}abstract {{ func.name }}{% else %}system {{func.name }}{%endif%}{% endif %}{% endfor %};
 	{%endfor%}
+	 {% for func in MyFunctions %}
+		{{func.name}}: {% for attribute in func.attributes %}{% if attribute.name == "component"%}{% if attribute.value == "abstract" %}abstract {{ func.name }}{% else %}system {{func.name }}{%endif%}{% endif %}{% endfor %};
+	{%endfor%}
 {% endif %}
 
+Conn length: {{ Connections|length}}
 {% if Connections|length > 0 %}
 	connections
   	{% for conn in Connections %}

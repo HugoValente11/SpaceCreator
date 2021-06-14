@@ -196,7 +196,8 @@ IVFunction *IVModel::getFunction(const QString &name, Qt::CaseSensitivity caseSe
 
 IVMyFunction *IVModel::getMyFunction(const shared::Id &id) const
 {
-    return qobject_cast<IVMyFunction *>(getObject(id));
+//    return qobject_cast<IVMyFunction *>(getObject(id));
+    return nullptr;
 }
 
 /*!
@@ -205,7 +206,8 @@ IVMyFunction *IVModel::getMyFunction(const shared::Id &id) const
  */
 IVMyFunction *IVModel::getMyFunction(const QString &name, Qt::CaseSensitivity caseSensitivity) const
 {
-    return qobject_cast<IVMyFunction *>(getObjectByName(name, IVObject::Type::MyFunction, caseSensitivity));
+//    return qobject_cast<IVMyFunction *>(getObjectByName(name, IVObject::Type::MyFunction, caseSensitivity));
+    return nullptr;
 }
 
 IVFunctionType *IVModel::getFunctionType(const QString &name, Qt::CaseSensitivity caseSensitivity) const
@@ -275,45 +277,46 @@ QHash<QString, IVFunctionType *> IVModel::getAvailableFunctionTypes(const IVFunc
 
 QHash<QString, IVFunctionType *> IVModel::getAvailableFunctionTypes(const IVMyFunction *fnObj) const
 {
-    QHash<QString, IVFunctionType *> result;
-    if (!fnObj)
-        return result;
+//    QHash<QString, IVFunctionType *> result;
+//    if (!fnObj)
+//        return result;
 
-    auto isValid = [](const IVFunctionType *objFnType, const IVMyFunction *objFn) {
-        IVObject *objFnTypeParent = objFnType->parentObject();
+//    auto isValid = [](const IVFunctionType *objFnType, const IVMyFunction *objFn) {
+//        IVObject *objFnTypeParent = objFnType->parentObject();
 
-        if (!objFnTypeParent) // it's a global FunctionType
-            return true;
+//        if (!objFnTypeParent) // it's a global FunctionType
+//            return true;
 
-        IVObject *objFnParent = objFn->parentObject();
-        while (objFnParent) {
-            if (objFnParent == objFnTypeParent)
-                return true;
-            objFnParent = objFnParent->parentObject();
-        }
-        return false;
-    };
+//        IVObject *objFnParent = objFn->parentObject();
+//        while (objFnParent) {
+//            if (objFnParent == objFnTypeParent)
+//                return true;
+//            objFnParent = objFnParent->parentObject();
+//        }
+//        return false;
+//    };
 
-    for (auto obj : objects()) {
-        if (IVFunctionType *objFnType = qobject_cast<IVFunctionType *>(obj)) {
-            if (objFnType->isFunctionType() && isValid(objFnType, fnObj)) {
-                result.insert(objFnType->title(), objFnType);
-            }
-        }
-    }
+//    for (auto obj : objects()) {
+//        if (IVFunctionType *objFnType = qobject_cast<IVFunctionType *>(obj)) {
+//            if (objFnType->isFunctionType() && isValid(objFnType, fnObj)) {
+//                result.insert(objFnType->title(), objFnType);
+//            }
+//        }
+//    }
 
-    const auto sharedObjects = d->m_sharedTypesModel->objects();
-    for (auto sharedObject : sharedObjects) {
-        if (sharedObject->parentObject() == nullptr) {
-            if (auto fnType = sharedObject->as<IVFunctionType *>()) {
-                if (fnType->isFunctionType()) {
-                    result[fnType->title()] = fnType;
-                }
-            }
-        }
-    }
+//    const auto sharedObjects = d->m_sharedTypesModel->objects();
+//    for (auto sharedObject : sharedObjects) {
+//        if (sharedObject->parentObject() == nullptr) {
+//            if (auto fnType = sharedObject->as<IVFunctionType *>()) {
+//                if (fnType->isFunctionType()) {
+//                    result[fnType->title()] = fnType;
+//                }
+//            }
+//        }
+//    }
 
-    return result;
+//    return result;
+    return {};
 }
 
 IVInterface *IVModel::getInterface(const shared::Id &id) const

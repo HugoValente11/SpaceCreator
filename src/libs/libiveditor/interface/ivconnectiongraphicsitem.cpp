@@ -41,7 +41,9 @@
 
 static const qreal kSelectionOffset = 10;
 static const QList<int> kNestedTypes { ive::IVFunctionGraphicsItem::Type, ive::IVFunctionTypeGraphicsItem::Type,
-    ive::IVCommentGraphicsItem::Type, ive::IVMyFunctionGraphicsItem::Type };
+//    ive::IVCommentGraphicsItem::Type };
+ive::IVCommentGraphicsItem::Type, ive::IVMyFunctionGraphicsItem::Type };
+
 
 namespace ive {
 
@@ -285,7 +287,9 @@ void IVConnectionGraphicsItem::layoutInterfaceConnections(IVInterfaceGraphicsIte
 
 //! Get list of graphics items intersected with \a connection
 static inline QList<QGraphicsItem *> intersectedItems(IVConnectionGraphicsItem *connection,
-        const QList<int> &types = { IVFunctionGraphicsItem::Type, IVFunctionTypeGraphicsItem::Type, IVMyFunctionGraphicsItem::Type })
+        const QList<int> &types = { IVFunctionGraphicsItem::Type, IVFunctionTypeGraphicsItem::Type})
+//const QList<int> &types = { IVFunctionGraphicsItem::Type, IVFunctionTypeGraphicsItem::Type, IVMyFunctionGraphicsItem::Type })
+
 {
     const QVector<QPointF> &points = connection->points();
     QList<QGraphicsItem *> intersectedGraphicsItems = connection->scene()->items(points);
@@ -474,6 +478,7 @@ IVMyFunctionGraphicsItem *IVConnectionGraphicsItem::mySourceItem() const
 IVMyFunctionGraphicsItem *IVConnectionGraphicsItem::myTargetItem() const
 {
     return m_endItem ? qgraphicsitem_cast<IVMyFunctionGraphicsItem *>(m_endItem->targetItem()) : nullptr;
+
 }
 
 QList<QPair<shared::VEObject *, QVector<QPointF>>>
