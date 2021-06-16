@@ -441,15 +441,7 @@ void IVMyFunctionGraphicsItem::prepareTextRect(QRectF &textRect, const QRectF &t
 
 shared::ColorManager::HandledColors IVMyFunctionGraphicsItem::handledColorType() const
 {
-    if (isRootItem())
-        return shared::ColorManager::HandledColors::FunctionRoot;
-
-    const QRectF nestedRect = nestedItemsSceneBoundingRect();
-    if (nestedRect.isValid()
-            && !sceneBoundingRect().contains(nestedRect.marginsAdded(shared::graphicsviewutils::kContentMargins)))
-        return shared::ColorManager::HandledColors::FunctionPartial;
-
-    return shared::ColorManager::HandledColors::FunctionRegular;
+    return shared::ColorManager::HandledColors::MyFunction;
 }
 
 void IVMyFunctionGraphicsItem::applyColorScheme()

@@ -42,11 +42,11 @@ public:
 
         Function,
         FunctionType,
+        MyFunction,
         RequiredInterface,
         ProvidedInterface,
         InterfaceGroup,
         Comment,
-        MyFunction,
         Connection,
         ConnectionGroup,
     };

@@ -862,7 +862,7 @@ void InterfaceDocument::showContextMenuForIVModel(const QPoint &pos)
     }
     QList<QAction *> actions;
 
-    if (obj->type() == ivm::IVObject::Type::Function || obj->type() == ivm::IVObject::Type::FunctionType) {
+    if (obj->type() == ivm::IVObject::Type::Function || obj->type() == ivm::IVObject::Type::FunctionType || obj->type() == ivm::IVObject::Type::MyFunction ) {
         QAction *actExportSelectedEntities = new QAction(tr("Export selected entities"));
         connect(actExportSelectedEntities, &QAction::triggered, this, &InterfaceDocument::exportSelectedFunctions);
         actions.append(actExportSelectedEntities);

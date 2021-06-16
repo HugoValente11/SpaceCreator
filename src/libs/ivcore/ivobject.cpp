@@ -79,7 +79,9 @@ bool IVObject::aboutToBeRemoved()
 void IVObject::sortObjectList(QList<IVObject *> &objects)
 {
     std::stable_sort(objects.begin(), objects.end(),
-            [](ivm::IVObject *obj1, ivm::IVObject *obj2) { return obj1->type() < obj2->type(); });
+            [](ivm::IVObject *obj1, ivm::IVObject *obj2) {
+        return obj1->type() < obj2->type();
+    });
 }
 
 IVObject::Type IVObject::type() const
