@@ -38,6 +38,8 @@ end {{func.name}};
 {% endfor %}
 -- End of Handling Functions ------------------------------
 
+
+
 -- Handle My Functions ------------------------------
 {% for func in MyFunctions %}
 abstract {{ func.name }}
@@ -57,17 +59,16 @@ system mySystem
 end mySystem;
 
 system implementation mySystem.impl
-{% if Functions|length > 0 %}
+{% if Functions|length > 0 or MyFunctions|length > 0 %}
 	subcomponents
   	{% for func in Functions %}
 		{{func.name}}: {% for attribute in func.attributes %}{% if attribute.name == "component"%}{% if attribute.value == "abstract" %}abstract {{ func.name }}{% else %}system {{func.name }}{%endif%}{% endif %}{% endfor %};
 	{%endfor%}
 	 {% for func in MyFunctions %}
-		{{func.name}}: {% for attribute in func.attributes %}{% if attribute.name == "component"%}{% if attribute.value == "abstract" %}abstract {{ func.name }}{% else %}system {{func.name }}{%endif%}{% endif %}{% endfor %};
+		{{func.name}}: abstract {{func.name}};
 	{%endfor%}
 {% endif %}
 
-Conn length: {{ Connections|length}}
 {% if Connections|length > 0 %}
 	connections
   	{% for conn in Connections %}

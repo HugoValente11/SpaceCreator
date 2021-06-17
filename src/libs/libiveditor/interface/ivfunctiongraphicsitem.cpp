@@ -141,6 +141,8 @@ void IVFunctionGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphics
     if (!isRootItem() && entity() && entity()->hasNestedChildren()) {
         QRectF iconRect { QPointF(0, 0), m_svgRenderer->defaultSize() };
         iconRect.moveTopRight(br.adjusted(kRadius, kRadius, -kRadius, -kRadius).topRight());
+
+
         m_svgRenderer->render(painter, iconRect);
 
         drawNestedView(painter);

@@ -96,7 +96,7 @@ IVMyFunctionGraphicsItem::IVMyFunctionGraphicsItem(ivm::IVMyFunction *entity, QG
     m_textItem->setTextAlignment(Qt::AlignCenter);
 
     if (!m_svgRenderer) // TODO: change icon
-        m_svgRenderer = new QSvgRenderer(QLatin1String(":/tab_interface/toolbar/icns/change_root.svg"));
+        m_svgRenderer = new QSvgRenderer(QLatin1String(":/tab_interface/toolbar/icns/diagram.svg"));
 }
 
 void IVMyFunctionGraphicsItem::init()
@@ -133,10 +133,17 @@ void IVMyFunctionGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
     painter->setBrush(brush());
 
     const QRectF br = boundingRect().adjusted(kOffset, kOffset, -kOffset, -kOffset);
+
+
     if (isRootItem())
         painter->drawRect(br);
     else
         painter->drawRoundedRect(br, kRadius, kRadius);
+
+    QRectF iconRect { QPointF(0, 0), m_svgRenderer->defaultSize() };
+    iconRect.moveTopRight(br.adjusted(kRadius, kRadius, -kRadius, -kRadius).topRight());
+    m_svgRenderer->render(painter, iconRect);
+
 
     if (!isRootItem() && entity() && entity()->hasNestedChildren()) {
         QRectF iconRect { QPointF(0, 0), m_svgRenderer->defaultSize() };
