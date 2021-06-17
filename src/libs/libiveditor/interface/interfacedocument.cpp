@@ -315,7 +315,7 @@ QList<ivm::IVObject *> InterfaceDocument::prepareSelectedObjectsForExport(QStrin
     for (const auto id : d->objectsSelectionModel->selection().indexes()) {
         const int role = static_cast<int>(ive::IVVisualizationModelBase::IdRole);
         if (ivm::IVObject *object = d->objectsModel->getObject(id.data(role).toUuid())) {
-            if (object->isFunction() && object->parentObject() == nullptr) {
+            if ((object->isFunction() && object->parentObject() == nullptr) || (object->isMyFunction() && object->parentObject() == nullptr)) {
                 exportNames.append(object->entityAttributeValue<QString>(QLatin1String("name")));
             }
             objects.append(object);

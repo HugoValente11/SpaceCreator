@@ -455,7 +455,9 @@ QSet<QString> IVModel::nestedFunctionNames(const IVFunctionType *fnt) const
     if (!fnt) {
         for (shared::VEObject *object : objects()) {
             if (auto obj = qobject_cast<ivm::IVObject *>(object)) {
-                if (obj->type() == IVObject::Type::Function || obj->type() == IVObject::Type::FunctionType) {
+//                if (obj->type() == IVObject::Type::Function || obj->type() == IVObject::Type::FunctionType || obj->type() == IVObject::Type::MyFunction) {
+                    if (obj->type() == IVObject::Type::Function || obj->type() == IVObject::Type::FunctionType) {
+
                     names.insert(obj->title());
                 }
             }
