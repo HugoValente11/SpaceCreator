@@ -17,6 +17,8 @@ comm                :   |_ Instance of comment
 -- generated code: do not edit
 ---------------------------------------------------
 
+package mypackage
+public
 -- Handle Functions ------------------------------
 {% for func in Functions %}
 	{% for attribute in func.attributes %}
@@ -28,12 +30,12 @@ system {{func.name }}
 			{%endif%}
 		{% endif %}
 	{% endfor %}
-				{% if func.interfaces != 0 %}
+	{% if func.interfaces != 0 %}
 	features
-						{% for iface in func.interfaces %}
+		{% for iface in func.interfaces %}
 		{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
 						{% endfor %}
-				{%endif%}
+		{%endif%}
 end {{func.name}};
 {% endfor %}
 -- End of Handling Functions ------------------------------
@@ -48,12 +50,34 @@ abstract {{ func.name }}
 	{% for iface in func.interfaces %}
 		{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
 	{% endfor %}
+	{% for attr in func.attributes %}
+		{% if attr.name == "publisher_name" %}
+		{{ attr.value }}: out event data port;
+		{%endif%}
+	{% endfor %}
+	{% for attr in func.attributes %}
+	{% if attr.name == "subscriber_name" %}
+		{{ attr.value }}: in event data port;
+		{%endif%}
+	{% endfor %}
 {%endif%}
 end {{func.name}};
 {% endfor %}
 -- End of Handling My Functions ------------------------------
 
+-- Create broker if pub exists
 
+abstract broker
+	features
+		{% for func in MyFunctions %}{% for attr in func.attributes %}{%if attr.name == "publisher_name" or attr.name == "subscriber_name" %}{%if attr.name == "publisher_name" %}{{attr.value}}_in: in{%elif attr.name == "subscriber_name" %}{{attr.value}}_out: out{%endif%} event data port;
+		{%endif%}{%endfor %} {%endfor%}
+end broker;
+
+-- Ending of creating broker
+
+{%for func in MyFunction%}
+{{func.publisher}}
+{%endfor%}
 -- Create system ------------------------
 system mySystem
 end mySystem;
@@ -67,19 +91,27 @@ system implementation mySystem.impl
 	 {% for func in MyFunctions %}
 		{{func.name}}: abstract {{func.name}};
 	{%endfor%}
+		broker: abstract broker;
 {% endif %}
 
-{% if Connections|length > 0 %}
+{% if Connections|length > 0 or MyFunctions|length > 0 %}
 	connections
   	{% for conn in Connections %}
   	  	{{conn.source}}_{{conn.target}}_{{conn.siName}}: port {% if conn.siIsRequired%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%} -> {% if conn.siIsProvided%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%}
   	    {Timing => Immediate;}; 	
   	{% endfor %}
-	end connections
+	{% for func in MyFunctions %}{%for attr in func.attributes %}
+	{%if attr.name == "publisher_name" %}
+		{{func.name}}_{{attr.value}}: port {{func.name}}.{{attr.value}} -> broker.{{attr.value}} {Timing => Immediate;};	
+	{%elif attr.name == "subscriber_name" %}
+		{{attr.value}}: port broker.{{attr.value}} -> {{func.name}}.{{attr.value}} {Timing => Immediate;};	
+	{%endif%}{%endfor%}{%endfor%}
 
   {% endif %}
 end mySystem.impl;
 -- End of Creating system ------------------------
+
+end mypackage;
 
 
 

@@ -56,6 +56,10 @@ const QHash<QString, Props::Token> Props::TokensByName = {
     { "Number", Token::Number },
     { "Type", Token::Type },
     { "component", Token::component},
+    { "publisher", Token::publisher},
+    { "publisher_name", Token::publisher_name},
+    { "subscriber", Token::subscriber},
+    { "subscriber_name", Token::subscriber_name},
 
 
     // TASTE props:

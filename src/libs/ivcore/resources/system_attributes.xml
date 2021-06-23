@@ -111,4 +111,54 @@
             <Function/>
         </Scopes>
     </Attr>
+    <Attr name="publisher">
+        <Type>
+            <Enumeration defaultValue="NO">
+                <Entry value="YES"/>
+                <Entry value="NO"/>
+            </Enumeration>
+        </Type>
+        <Scopes>
+            <MyFunction/>
+            <Function/>
+        </Scopes>
+    </Attr>
+    <Attr name="publisher_name">
+        <Type>
+            <String/>
+        </Type>
+        <Scopes>
+            <MyFunction>
+                <AttrValidator name="publisher" value="YES"/>
+            </MyFunction>
+            <Function>
+                <AttrValidator name="publisher" value="YES"/>
+            </Function>
+        </Scopes>
+    </Attr>
+    <Attr name="subscriber">
+        <Type>
+            <Enumeration defaultValue="NO">
+                <Entry value="YES"/>
+                <Entry value="NO"/>
+            </Enumeration>
+        </Type>
+        <Scopes>
+            <MyFunction/>
+            <Function/>
+        </Scopes>
+    </Attr>
+    <Attr name="subscriber_name">
+        <Type>
+            <String/>
+        </Type>
+        <Scopes>
+            <MyFunction>
+                <AttrValidator name="subscriber" value="YES"/>
+            </MyFunction>
+            <Function>
+                <AttrValidator name="subscriber" value="YES"/>
+            </Function>
+        </Scopes>
+    </Attr>
 </Attrs>

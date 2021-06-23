@@ -620,8 +620,14 @@ QTransform IVInterfaceGraphicsItem::ifaceTransform(Qt::Alignment alignment) cons
 QPainterPath IVInterfaceGraphicsItem::ifacePath() const
 {
     QPainterPath path;
-    path.addPolygon(QVector<QPointF> {
-            QPointF(-kHeight / 3, -kBase / 2), QPointF(-kHeight / 3, kBase / 2), QPointF(2 * kHeight / 3, 0) });
+//    path.addPolygon(QVector<QPointF> {
+//            QPointF(-kHeight / 3, -kBase / 2),
+//            QPointF(-kHeight / 3, kBase / 2),
+//            QPointF(2 * kHeight / 3, 0)
+//                    });
+    QRectF drawRect {-kHeight /3, -kHeight/3, kHeight, kHeight};
+    path.addRect(drawRect);
+
     path.closeSubpath();
     return path;
 }
@@ -666,6 +672,25 @@ QPainterPath IVInterfaceGraphicsItem::typePath() const
         kindPath.translate(0, rect.height() / 3);
         break;
     }
+    case ivm::IVInterface::OperationKind::Unprotected: {
+//         --------------------- Draw P
+        const qreal kindBaseValue = kHeight;
+        const QRectF rect { -kindBaseValue / 2, -kindBaseValue / 2, kindBaseValue, kindBaseValue * 2 / 3 };
+        QRectF arcRect(rect.adjusted(rect.width(), 0, -rect.width() , 0));
+        arcRect.moveCenter(QPointF(rect.center().x(), rect.top()));
+        kindPath.moveTo(arcRect.center());
+        kindPath.arcTo(arcRect, 90, 180);
+        kindPath.lineTo(0, kindBaseValue/3);
+        kindPath.translate(0, rect.height() / 3);
+        break;
+
+//        // --------------------- Write S
+//        const qreal kindBaseValue = kHeight;
+//        QFont myFont("Times", 10);
+//        const QPointF baseline { -kindBaseValue / 2, -kindBaseValue / 2 };
+//        kindPath.addText(baseline, myFont, tr("S"));
+//        break;
+    }
     default:
         break;
     }
@@ -698,6 +723,7 @@ QPainterPath IVInterfaceGraphicsItem::composeShape() const
     pathStroker.setWidth(kBase);
     const QPainterPath strokePath = pathStroker.createStroke(strokeBasePath);
     path = path.united(strokePath);
+
 
     return path.simplified();
 }

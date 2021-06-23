@@ -66,6 +66,7 @@ static inline QVector<QPointF> generateConnectionPath(IVConnectionGraphicsItem *
     const bool isStartEndpointNested = startItem->targetItem()->isAncestorOf(endItem);
     const bool isEndEndpointNested = endItem->targetItem()->isAncestorOf(startItem);
 
+
     return shared::graphicsviewutils::createConnectionPath(shared::graphicsviewutils::siblingItemsRects(connection),
             startItem->connectionEndPoint(isStartEndpointNested), startItem->targetItem()->sceneBoundingRect(),
             endItem->connectionEndPoint(isEndEndpointNested), endItem->targetItem()->sceneBoundingRect());

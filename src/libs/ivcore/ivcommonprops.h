@@ -64,6 +64,10 @@ public:
         Number,
         Type,
         component,
+        publisher,
+        publisher_name,
+        subscriber,
+        subscriber_name,
 
         // KNOWN TASTE props:
         coordinates,
