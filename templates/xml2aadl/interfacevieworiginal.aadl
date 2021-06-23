@@ -16,20 +16,6 @@ comm                :   |_ Instance of comment
 -- 
 -- generated code: do not edit
 ---------------------------------------------------
-
-{% for func in MyFunctions %}
-	-- Name: {{ func.name }}
-	-- Properties MyFunctions: 
-	{% for prop in func.properties %}
-      -- {{prop.name }} {{ prop.value }} 
-	{% endfor %}
-	-- Attributes MyFunctions: 
-	{% for attr in func.attributes %}
-      -- {{attr.name }} {{ attr.value }} 
-	{% endfor %}
-{% endfor %}
-
-
 {% for func in Functions %}
     {% include "function.tmplt" %}
 {% endfor %}
@@ -44,14 +30,15 @@ WITH Taste;
 WITH DataView;
 WITH TASTE_IV_Properties;
 
+{{ MyFunctions }}
 
-ABSTRACT interfaceview
+SYSTEM interfaceview
 PROPERTIES
    Taste::dataView     => ("DataView");
    TASTE::dataViewPath => ("DataView.aadl");
 END interfaceview;
 
-ABSTRACT IMPLEMENTATION interfaceview.others
+SYSTEM IMPLEMENTATION interfaceview.others
 SUBCOMPONENTS
 {% for func in Functions %}
 {% for attr in func.attributes %}
@@ -61,7 +48,6 @@ SUBCOMPONENTS
 {% endfor %}
 {% endfor %}
 {% if Connections|length > 0 %}
-Length :  {{Connections|length}}
 CONNECTIONS
 {% for conn in Connections %}
    {{ conn.source }}_RI_{{ conn.siName }}_{{ conn.target }}_PI_{{ conn.tiName }} : SUBPROGRAM ACCESS {{ conn.target }}.PI_{{ conn.tiName }} -> {{ conn.source }}.RI_{{ conn.siName }};

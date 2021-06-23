@@ -33,7 +33,7 @@ system {{func.name }}
 	{% if func.interfaces != 0 %}
 	features
 		{% for iface in func.interfaces %}
-		{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
+		{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} event data port;
 						{% endfor %}
 		{%endif%}
 end {{func.name}};
@@ -48,7 +48,7 @@ abstract {{ func.name }}
 {% if func.interfaces != 0 %}
 	features
 	{% for iface in func.interfaces %}
-		{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} data port;
+		{% if iface.isProvided %}PI_{%else%}RI_{%endif%}{{ iface.name }}: {% if iface.isProvided %}in{%else%}out{%endif%} event data port;
 	{% endfor %}
 	{% for attr in func.attributes %}
 		{% if attr.name == "publisher_name" %}
@@ -67,11 +67,13 @@ end {{func.name}};
 
 -- Create broker if pub exists
 
+{% comment %}
 abstract broker
 	features
 		{% for func in MyFunctions %}{% for attr in func.attributes %}{%if attr.name == "publisher_name" or attr.name == "subscriber_name" %}{%if attr.name == "publisher_name" %}{{attr.value}}_in: in{%elif attr.name == "subscriber_name" %}{{attr.value}}_out: out{%endif%} event data port;
 		{%endif%}{%endfor %} {%endfor%}
 end broker;
+{% endcomment %}
 
 -- Ending of creating broker
 
@@ -91,21 +93,23 @@ system implementation mySystem.impl
 	 {% for func in MyFunctions %}
 		{{func.name}}: abstract {{func.name}};
 	{%endfor%}
-		broker: abstract broker;
 {% endif %}
 
 {% if Connections|length > 0 or MyFunctions|length > 0 %}
 	connections
   	{% for conn in Connections %}
-  	  	{{conn.source}}_{{conn.target}}_{{conn.siName}}: port {% if conn.siIsRequired%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%} -> {% if conn.siIsProvided%}{{conn.source}}.{{conn.siName}}{%else%}{{conn.target}}.{{conn.tiName}}{%endif%}
+  	  	{{conn.source}}_{{conn.target}}_{{conn.siName}}: port {% if conn.siIsRequired%}{{conn.source}}.RI_{{conn.siName}}{%else%}{{conn.target}}.PI_{{conn.tiName}}{%endif%} -> {% if conn.tiIsProvided%}{{conn.target}}.PI_{{conn.siName}}{%else%}{{conn.target}}.RI_{{conn.tiName}}{%endif%}
   	    {Timing => Immediate;}; 	
   	{% endfor %}
+	{% comment %}
+	This was another solution but just disabling multicasting seems like an easier way to do it
 	{% for func in MyFunctions %}{%for attr in func.attributes %}
 	{%if attr.name == "publisher_name" %}
 		{{func.name}}_{{attr.value}}: port {{func.name}}.{{attr.value}} -> broker.{{attr.value}} {Timing => Immediate;};	
 	{%elif attr.name == "subscriber_name" %}
 		{{attr.value}}: port broker.{{attr.value}} -> {{func.name}}.{{attr.value}} {Timing => Immediate;};	
 	{%endif%}{%endfor%}{%endfor%}
+	{%endcomment%}
 
   {% endif %}
 end mySystem.impl;

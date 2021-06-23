@@ -121,15 +121,15 @@ ConnectionCreationValidator::FailReason ConnectionCreationValidator::canConnect(
         return FailReason::SameInterface;
 
     // [6] - Multicast is disabled atm
-    if (sourceIface) {
-        if (auto model = sourceIface->model()) {
-            for (const auto connection : model->getConnectionsForIface(sourceIface->id())) {
-                if (connection->sourceInterface()->id() == sourceIface->id()) {
-                    return FailReason::MulticastDisabled;
-                }
-            }
-        }
-    }
+//    if (sourceIface) {
+//        if (auto model = sourceIface->model()) {
+//            for (const auto connection : model->getConnectionsForIface(sourceIface->id())) {
+//                if (connection->sourceInterface()->id() == sourceIface->id()) {
+//                    return FailReason::MulticastDisabled;
+//                }
+//            }
+//        }
+//    }
 
     // [5] - both ifaces should be either (PI+RI|PI+PI|RI+RI) compatible by kind and params, or PI+RI.inheritPI=true
     if (sourceIface && targetIface)
@@ -154,13 +154,13 @@ ConnectionCreationValidator::FailReason ConnectionCreationValidator::checkKindAn
     if (auto ri = IVConnection::selectIface<const IVInterfaceRequired *>(sourceIface, targetIface))
         if (IVConnection::selectIface<const IVInterfaceProvided *>(sourceIface, targetIface)) {
 #ifndef IV_MULTICAST_CONNECTION
-            if (IVModel *model = ri->model()) {
-                const QVector<IVConnection *> riConnections = model->getConnectionsForIface(ri->id());
-                for (const IVConnection *riConnection : riConnections)
-                    if ((riConnection->sourceInterface() && riConnection->sourceInterface()->isProvided())
-                            || (riConnection->targetInterface() && riConnection->targetInterface()->isProvided()))
-                        return FailReason::MulticastDisabled;
-            }
+//            if (IVModel *model = ri->model()) {
+//                const QVector<IVConnection *> riConnections = model->getConnectionsForIface(ri->id());
+//                for (const IVConnection *riConnection : riConnections)
+//                    if ((riConnection->sourceInterface() && riConnection->sourceInterface()->isProvided())
+//                            || (riConnection->targetInterface() && riConnection->targetInterface()->isProvided()))
+//                        return FailReason::MulticastDisabled;
+//            }
 #endif // IV_MULTICAST_CONNECTION
 
             if (ri->isInheritPI())
