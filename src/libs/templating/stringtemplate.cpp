@@ -127,8 +127,6 @@ bool StringTemplate::parseFile(
         if (v.canConvert<QVariantList>()) {
             const QVariantList list = v.value<QVariantList>();
 
-            qWarning() << endl << "\n\n\nList:" << list[0] << "\n";
-
             if (list.size() == 1 && list[0].canConvert<QObject *>()) {
                 QObject *obj = list[0].value<QObject *>();
                 context.insert(name, obj);

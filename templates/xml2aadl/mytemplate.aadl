@@ -17,6 +17,7 @@ comm                :   |_ Instance of comment
 -- generated code: do not edit
 ---------------------------------------------------
 
+Path: {{func.path}}
 package mypackage
 public
 -- Handle Functions ------------------------------
@@ -67,13 +68,13 @@ end {{func.name}};
 
 -- Create broker if pub exists
 
-{% comment %}
+{% for func in MyFunctions %}{% for attr in func.attributes %}{%if attr.name == "publisher_name" %}Attr name:{{attr.name}}, For loop first:{{ forloop.first }}
 abstract broker
 	features
 		{% for func in MyFunctions %}{% for attr in func.attributes %}{%if attr.name == "publisher_name" or attr.name == "subscriber_name" %}{%if attr.name == "publisher_name" %}{{attr.value}}_in: in{%elif attr.name == "subscriber_name" %}{{attr.value}}_out: out{%endif%} event data port;
 		{%endif%}{%endfor %} {%endfor%}
 end broker;
-{% endcomment %}
+{%endif%}{%endfor%}{%endfor%}
 
 -- Ending of creating broker
 
@@ -93,6 +94,7 @@ system implementation mySystem.impl
 	 {% for func in MyFunctions %}
 		{{func.name}}: abstract {{func.name}};
 	{%endfor%}
+		broker: abstract broker;
 {% endif %}
 
 {% if Connections|length > 0 or MyFunctions|length > 0 %}
@@ -101,15 +103,13 @@ system implementation mySystem.impl
   	  	{{conn.source}}_{{conn.target}}_{{conn.siName}}: port {% if conn.siIsRequired%}{{conn.source}}.RI_{{conn.siName}}{%else%}{{conn.target}}.PI_{{conn.tiName}}{%endif%} -> {% if conn.tiIsProvided%}{{conn.target}}.PI_{{conn.siName}}{%else%}{{conn.target}}.RI_{{conn.tiName}}{%endif%}
   	    {Timing => Immediate;}; 	
   	{% endfor %}
-	{% comment %}
-	This was another solution but just disabling multicasting seems like an easier way to do it
+
 	{% for func in MyFunctions %}{%for attr in func.attributes %}
 	{%if attr.name == "publisher_name" %}
-		{{func.name}}_{{attr.value}}: port {{func.name}}.{{attr.value}} -> broker.{{attr.value}} {Timing => Immediate;};	
+		{{func.name}}_{{attr.value}}: port {{func.name}}.{{attr.value}} -> broker.{{attr.value}}_in {Timing => Immediate;};	
 	{%elif attr.name == "subscriber_name" %}
-		{{attr.value}}: port broker.{{attr.value}} -> {{func.name}}.{{attr.value}} {Timing => Immediate;};	
+		{{func.name}}_{{attr.value}}: port broker.{{attr.value}}_out -> {{func.name}}.{{attr.value}} {Timing => Immediate;};	
 	{%endif%}{%endfor%}{%endfor%}
-	{%endcomment%}
 
   {% endif %}
 end mySystem.impl;

@@ -40,6 +40,13 @@ ExportableIVObject::ExportableIVObject(const ivm::IVObject *ivObject)
 QString ExportableIVObject::name() const
 {
     return exportedObject<ivm::IVObject>()->title();
+
+}
+
+QString ExportableIVObject::subscriber_name() const
+{
+    return exportedObject<ivm::IVObject>()->subscriber_name();
+
 }
 
 /**
@@ -103,8 +110,6 @@ QVariantList ExportableIVObject::generateProperties(const EntityAttributes &attr
     QVariantList result;
     for (auto it = attributes.cbegin(); it != attributes.cend(); ++it) {
         if (it.value().isProperty() == isProperty) {
-            qWarning() << "\nGenerate properties key :" << it.key() << "\n";
-
             result << QVariant::fromValue(templating::ExportableProperty(it.key(), it.value().value()));
         }
     }

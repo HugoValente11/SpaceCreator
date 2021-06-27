@@ -59,6 +59,9 @@ public:
     QString title() const override;
     QString titleUI() const override;
 
+    QString subscriber_name() const;
+
+
     IVObject::Type type() const;
 
     QVector<qint32> coordinates() const override;

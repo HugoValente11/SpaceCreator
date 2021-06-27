@@ -59,6 +59,11 @@ QString IVObject::title() const
     return entityAttributeValue<QString>(meta::Props::token(meta::Props::Token::name));
 }
 
+QString IVObject::subscriber_name() const
+{
+    return entityAttributeValue<QString>(meta::Props::token(meta::Props::Token::subscriber_name));
+}
+
 QString IVObject::titleUI() const
 {
     return IVNameValidator::decodeName(type(), title());

@@ -35,6 +35,7 @@ class ExportableIVObject : public templating::AbstractExportableObject
 {
     Q_GADGET
     Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString subscriber_name READ subscriber_name)
     Q_PROPERTY(QVariantList attributes READ attributes)
     Q_PROPERTY(QVariantList properties READ properties)
     Q_PROPERTY(QStringList path READ path)
@@ -43,6 +44,7 @@ public:
     explicit ExportableIVObject(const ivm::IVObject *ivObject = nullptr);
 
     QString name() const;
+    QString subscriber_name() const;
 
     static QVariant createFrom(const ivm::IVObject *ivObject);
 

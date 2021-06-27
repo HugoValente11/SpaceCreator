@@ -28,7 +28,7 @@ func.connectedFunctions :   |_ List of connected functions
 connectedFunc           :       |_ List of parent Functions names
 
 {% endcomment %}
-<Function{% for attr in func.attributes %} {{ attr.name }}="{{ attr.value }}"{% endfor %}>
+<Function nombre={{func.name}} {% for attr in func.attributes %} {{ attr.name }}="{{ attr.value }}"{% endfor %}>
 {% for prop in func.properties %}
     <Property name="{{ prop.name }}" value="{{ prop.value }}"/>
 {% endfor %}
