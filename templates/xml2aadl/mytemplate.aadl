@@ -17,7 +17,6 @@ comm                :   |_ Instance of comment
 -- generated code: do not edit
 ---------------------------------------------------
 
-Path: {{func.path}}
 package mypackage
 public
 -- Handle Functions ------------------------------
@@ -45,7 +44,7 @@ end {{func.name}};
 
 -- Handle My Functions ------------------------------
 {% for func in MyFunctions %}
-abstract {{ func.name }}
+abstract {{ func.name|lower }}
 {% if func.interfaces != 0 %}
 	features
 	{% for iface in func.interfaces %}
@@ -66,7 +65,24 @@ end {{func.name}};
 {% endfor %}
 -- End of Handling My Functions ------------------------------
 
--- Create broker if pub exists
+-- Create broker if pub exists -------------------------------
+{% with MyFunctions|dictsort:"subscriber_name" as sortedList%}
+{% for func in sortedList %}
+{% if forloop.last and func.subscriber_name != "" %}
+abstract broker
+	features
+		{% for func in MyFunctions %}{% for attr in func.attributes %}{%if attr.name == "publisher_name" or attr.name == "subscriber_name" %}{%if attr.name == "publisher_name" %}{{attr.value}}_out: out{%elif attr.name == "subscriber_name" %}{{attr.value}}_in: in{%endif%} event data port;
+		{%endif%}{%endfor %} {%endfor%}
+end broker;
+{%endif%}
+{%endfor%}
+{%endwith%}
+-- Ending of creating broker ------------------------------------
+
+
+{% comment %}
+The method above is probably best and closer to the actual goal. Just keeping this here to see how to use tags and filters if I'm in doubt
+-- Create broker if pub exists alternate method
 
 {% for func in MyFunctions %}{% for attr in func.attributes %}{%if attr.name == "publisher_name" %}Attr name:{{attr.name}}, For loop first:{{ forloop.first }}
 abstract broker
@@ -76,7 +92,8 @@ abstract broker
 end broker;
 {%endif%}{%endfor%}{%endfor%}
 
--- Ending of creating broker
+-- Ending of creating broker alternate method
+{% endcomment %}
 
 {%for func in MyFunction%}
 {{func.publisher}}
